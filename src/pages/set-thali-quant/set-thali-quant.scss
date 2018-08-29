@@ -1,0 +1,56 @@
+page-set-thali-quant {
+  .add-to-cart {
+    padding-left: 20px;
+    padding-right: 5px;
+    text-align: right;
+    font-size: large;
+  }
+
+  .remove-from-cart {
+    padding-right: 20px;
+    padding-left: 5px;
+    text-align: left;
+    font-size: 25px;
+  }
+
+  .add-cart-button {
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+
+  .add-remove-cart-button {
+    padding: 0;
+  }
+
+  .cart-quant {
+    width: 20px;
+  }
+
+  .cart-price {
+    font-size: 1.0em;
+    width: 100%;
+    padding-left: 5%;
+    text-align: right;
+  }
+  .disable-add{
+   color: lightgrey;
+  }
+}
+
+ion-modal.page-set-quant ion-backdrop {
+  visibility: visible !important;
+  z-index: 0;
+}
+
+ion-modal.custom-popup ion-backdrop {
+  visibility: visible !important;
+  z-index: 0;
+}
+
+ion-modal.custom-popup .modal-wrapper {
+  bottom: 0%;
+  width: 100%;
+  height: 250px;
+  position: absolute;
+}
+

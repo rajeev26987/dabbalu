@@ -1,0 +1,124 @@
+<ion-header>
+  <ion-navbar>  
+    <ion-title>Home</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content class="card-background-page">
+  <ion-scroll scrollX auto class="select-date-block">
+    <div class="scroll-item" *ngFor="let dt of getDates()">
+      <div class="date-day-block" [class.non-selectable]="!dt.flag" [class.curr-selected]="dt.sel" (click)="showMenuForDate(dt.date_obj, dt.flag)">
+        <div class="day-block">
+          {{dt.day}}
+        </div>
+        <div class="date-block">
+          {{dt.date}}
+        </div>
+      </div>
+    </div>
+  </ion-scroll>
+
+  <div *ngIf="CartLengthForDate() > 0" class="cart-item-style">
+    
+    <div class="cart-item-card">
+      Items scheduled:
+      <ion-grid>
+        <ion-row *ngFor="let citem of getCartWithDate()">
+          <ion-col col-6 class="cart-description">
+            <div>{{citem.item }}</div>
+            <div [hidden]="citem.size ==''">({{citem.size }})</div>
+            <div [hidden]="citem.sub_item.length == 0">
+              <div class="sub-item" *ngFor="let sitem of citem.sub_item">
+                {{sitem.item}} <span [hidden]="sitem.size ==''"> ({{citem.size }})</span>
+              </div>
+            </div>
+          </ion-col>
+          <ion-col>
+            <button ion-button outline small class="add-remove-cart-button"><p class="remove-from-cart" (click)="removeFromCart(citem.item,citem.size)">-</p> <p class="cart-quant">{{citem.quant}}</p> <p class="add-to-cart" (click)="addToCart(citem.item,citem.price,1,citem.size,citem.type,'i')">+</p></button>
+          </ion-col>
+          <ion-col align-self-center class="cart-price">
+            &#x20b9;{{citem.price * citem.quant }}
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+  </div>
+
+  <div class="create-thali-card">
+    <div class="create-thali-header">
+      Create your own thali for less price
+    </div>
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-card>
+            <img src="../../assets/imgs/thali_small.png" />
+          </ion-card>
+          <div text-center class="card-title">Small</div>
+          <div class="add-thali-button-wrap">
+            <button ion-button outline small class="add-thali-button" (click)="openSetThaliModal('small', get_curr_sel_date())">Add</button>
+          </div>
+        </ion-col>
+        <ion-col>
+          <ion-card>
+            <img src="../../assets/imgs/thali_medium.jpg" />
+          </ion-card>
+          <div text-center class="card-title">Medium</div>
+          <div class="add-thali-button-wrap">
+            <button ion-button outline small class="add-thali-button" (click)="openSetThaliModal('medium', get_curr_sel_date())">Add</button>
+          </div>
+        </ion-col>
+        <ion-col>
+          <ion-card>
+            <img src="../../assets/imgs/thali.jpg" />
+          </ion-card>
+          <div text-center class="card-title">Large</div>
+          <div class="add-thali-button-wrap">
+            <button ion-button outline small class="add-thali-button" (click)="openSetThaliModal('large', get_curr_sel_date())">Add</button>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+
+  </div>
+  <div class="choose-menu-card">
+
+    <div *ngIf="menuInitialized() == 0 || menuInitialized() == 3">
+      <div class="choose-menu-header">
+        Initializing menu..
+      </div>
+    </div>
+
+    <div *ngIf="menuInitialized() == 2">
+      <div class="choose-menu-header">
+        <p (click)="iniMenuItem()">Refresh</p>
+      </div>
+    </div>
+    <div *ngIf="menuInitialized() == 1">
+      <div class="choose-menu-header">
+        Choose from menu
+      </div>
+      <ion-row>
+        <ion-col *ngFor="let item of getMenuItem(get_curr_sel_day())" col-6>
+          <ion-card class="card-background-page">
+            <img src="{{item.icon}}" />
+          </ion-card>
+          <div class="card-title">{{item.title}}</div>
+          <div class="card-subtitle">{{item.note}}</div>
+          <div class="row">
+            <div class="col col-50 card-price">&#x20b9;{{item.price}}</div>
+            <div [hidden]="item.type=='a'" class="col col-50">
+              <button [hidden]="cartQuantityForItem(item.title) > 0" ion-button outline small (click)="openSetQuantModal(item.title, item.price, item.type)" class="add-cart-button">Add</button>
+              <button [hidden]="cartQuantityForItem(item.title) <= 0" (click)="openSetQuantModal(item.title, item.price, item.type)" class="add-remove-cart-button" ion-button outline small><p class="remove-from-cart">-</p> <p class="cart-quant">{{cartQuantityForItem(item.title)}}</p>   <p class="add-to-cart">+</p></button>
+            </div>
+            <div [hidden]="item.type !='a'" class="col col-50">
+              <button [hidden]="cartQuantityForItem(item.title) > 0" ion-button outline small (click)="addToCart(item.title, item.price,1,'', item.type)" class="add-cart-button">Add</button>
+              <button [hidden]="cartQuantityForItem(item.title) <= 0" class="add-remove-cart-button" ion-button outline small><p (click)="removeFromCart(item.title,'')" class="remove-from-cart">-</p> <p class="cart-quant">{{cartQuantityForItem(item.title)}}</p>   <p (click)="addToCart(item.title, item.price,1,'', item.type)" class="add-to-cart">+</p></button>
+            </div>
+          </div>
+        </ion-col>
+      </ion-row>
+    </div>
+  </div>
+</ion-content>

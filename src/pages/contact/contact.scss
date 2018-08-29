@@ -1,0 +1,69 @@
+page-contact {
+  .cart-page-style {
+    background-color: white;
+  }
+
+  .cart-item-style {
+    .cart-item-card {
+      background-color: white;
+      padding-bottom: 5%;
+    }
+
+
+    .cart-price {
+      font-size: 1.0em;
+      width: 100%;
+      padding-left: 5%;
+      text-align: right;
+    }
+
+    .cart-description {
+      font-size: 1.0em;
+      width: 100%;
+      text-align: left;
+    }
+
+    .add-to-cart {
+      padding-left: 20px;
+      padding-right: 5px;
+      text-align: right;
+      font-size: large;
+    }
+
+    .remove-from-cart {
+      padding-right: 20px;
+      padding-left: 5px;
+      text-align: left;
+      font-size: 25px;
+    }
+
+    .add-remove-cart-button {
+      padding: 0;
+    }
+
+    .cart-quant {
+      width: 20px;
+    }
+  }
+
+  .cart-bill-style {
+    .cart-bill-card {
+      background-color: white;
+      padding-top: 5%;
+      padding-bottom: 5%;
+    }
+
+    .cart-price {
+      font-size: 1.0em;
+      width: 100%;
+      padding-left: 5%;
+      text-align: right;
+    }
+
+    .cart-description {
+      font-size: 1.0em;
+      width: 100%;
+      text-align: left;
+    }
+  }
+}

@@ -1,0 +1,153 @@
+page-home {
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
+
+
+  .card-background-page {
+    .create-thali-card {
+      .create-thali-header {
+        padding: 15px;
+      }
+    }
+
+    .cart-item-card {
+      padding: 5%;
+      border-bottom: solid;
+      border-bottom-color: lightgrey;
+    }
+
+    .cart-price {
+      font-size: 1.0em;
+      width: 100%;
+      padding-left: 5%;
+      text-align: right;
+    }
+
+    .cart-description {
+      font-size: 1.0em;
+      width: 100%;
+      text-align: left;
+    }
+
+    .choose-menu-card {
+      .choose-menu-header {
+        padding: 10px;
+      }
+    }
+
+    ion-card {
+      position: relative;
+      text-align: center;
+    }
+
+    .card-title {
+      font-size: 1.0em;
+      width: 100%;
+      padding-left: 5%;
+      font-weight: bold;
+      text-align: left;
+    }
+
+    .card-subtitle {
+      font-size: 1.0em;
+      width: 100%;
+      padding-left: 5%;
+      text-align: left;
+    }
+
+    .card-price {
+      font-size: 1.0em;
+      width: 100%;
+      padding-left: 5%;
+      padding-top: 5%;
+      text-align: left;
+    }
+
+    .card-button {
+      font-size: 1.0em;
+      width: 100%;
+    }
+
+    .add-to-cart {
+      padding-left: 20px;
+      padding-right: 5px;
+      text-align: right;
+      font-size: large;
+    }
+
+    .remove-from-cart {
+      padding-right: 20px;
+      padding-left: 5px;
+      text-align: left;
+      font-size: 25px;
+    }
+
+    .add-cart-button {
+      padding-left: 32px;
+      padding-right: 32px;
+    }
+
+    .add-thali-button-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .add-thali-button {
+      padding-left: 32px;
+      padding-right: 32px;
+    }
+
+    .add-remove-cart-button {
+      padding: 0;
+    }
+
+    .cart-quant {
+      width: 20px;
+    }
+  }
+
+  ion-scroll[scrollX] {
+    white-space: nowrap;
+
+    .scroll-item {
+      display: inline-block;
+    }
+  }
+
+  .select-date-block {
+    height: 70px;
+    margin-top: 5px;
+  }
+
+  .date-day-block {
+    padding: 10px;
+    min-width: 70px;
+    text-align: center
+  }
+
+  .day-block {
+    font-size: 10px;
+  }
+
+  .date-block {
+    font-size: 20px;
+  }
+
+  .non-selectable {
+    color: lightgrey
+  }
+
+  .curr-selected {
+    color: lawngreen;
+    border-bottom: solid;
+    border-bottom-color: lawngreen;
+  }
+
+  .sub-item{
+    font-size: 80%;
+    color:#d0caca
+  }
+}

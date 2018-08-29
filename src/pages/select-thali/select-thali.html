@@ -1,0 +1,145 @@
+<!--
+  Generated template for the SelectThaliPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Select thali ({{size}})</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+  <ion-card (click)="openSelThaliMenuModal(size,'r')">
+    <img src="../../assets/imgs/roti_rice.png" />
+    <ion-card-content>
+      <ion-card-title>
+        Roti/Rice
+      </ion-card-title>
+      <p *ngIf="cartQuantityForThaliItemType('r') <= 0">
+        Select roti, rice, parathas and many more from the menu.<br />
+        <span style="color:red">Select at least one item to create thali.</span>
+      </p>
+      <p *ngIf="cartQuantityForThaliItemType('r') > 0">
+
+        <li *ngFor="let item of getThaliListForItemType('r')">
+          {{item.item + " (" + item.size +") - "+ item.quant }}
+        </li>
+
+        <ion-chip [hidden]="thaliItemCondition('r')" color="danger">
+          <ion-label> # Add at least 1 item in rice/roti</ion-label>
+        </ion-chip>
+      </p>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card (click)="openSelThaliMenuModal(size,'c')">
+    <img src="../../assets/imgs/aloo-gobi.jpg" />
+    <ion-card-content>
+      <ion-card-title>
+        Curry
+      </ion-card-title>
+      <p *ngIf="cartQuantityForThaliItemType('c') <= 0">
+        Select wide range of curries from the menu. <br />
+        <span style="color:red"> Select {{curry_no}} {{  (curry_no>1)? " curries" : " curry" }} to create thali.</span>
+      </p>
+      <p *ngIf="cartQuantityForThaliItemType('c') > 0">
+
+        <li *ngFor="let item of getThaliListForItemType('c')">
+          {{item.item + " (" + item.size +") - "+ item.quant }}
+        </li>
+
+        <ion-chip [hidden]="thaliItemCondition('c')" color="danger">
+          <ion-label>  # Add {{curry_no - cartQuantityForThaliItemType('c')}} more {{  ((curry_no - cartQuantityForThaliItemType('c')) >1)? " items " : " item " }} in curry</ion-label>
+        </ion-chip>
+      </p>
+    </ion-card-content>
+  </ion-card>
+
+
+
+  <div class="addon-div" *ngIf="menuInitialized() == 1">
+    <div class="addon-div-header">You can add upto 2 addons of your choice:</div>
+    <ion-scroll scrollX auto class="select-addon-block">
+      <div class="scroll-item" *ngFor="let item of getMenuWithType(get_curr_sel_day())" col-6>
+        <ion-card class="card-background-page">
+          <img src="{{item.icon}}" />
+        </ion-card>
+        <div class="card-title">{{item.title}}</div>
+        <div class="card-subtitle">{{item.note}}</div>
+        <div class="row">
+          <div class="col col-50 card-price">&#x20b9;{{item.price}}</div>
+          <div [hidden]="item.type =='a'" class="col col-50">
+            <button [disabled]="maxItemReached('a')" [hidden]="cartQuantityForThaliItem(item.title) > 0" ion-button outline small (click)="openSetQuantModal(item.title, item.price, item.type)" class="add-cart-button">Add</button>
+            <button [hidden]="cartQuantityForThaliItem(item.title) <= 0" (click)="openSetQuantModal(item.title, item.price, item.type)" class="add-remove-cart-button" ion-button outline small><p class="remove-from-cart">-</p> <p class="cart-quant">{{cartQuantityForThaliItem(item.title)}}</p>   <p [class.disable-add]="maxItemReached('a')" class="add-to-cart">+</p></button>
+          </div>
+          <div [hidden]="item.type !='a'" class="col col-50">
+            <button [disabled]="maxItemReached('a')" [hidden]="cartQuantityForThaliItem(item.title) > 0" ion-button outline small (click)="addToThali(item.title, item.price,1,'', item.type)" class="add-cart-button">Add</button>
+            <button [hidden]="cartQuantityForThaliItem(item.title) <= 0" class="add-remove-cart-button" ion-button outline small><p (click)="removeFromThali(item.title,'')" class="remove-from-cart">-</p> <p class="cart-quant">{{cartQuantityForThaliItem(item.title)}}</p>   <p [class.disable-add]="maxItemReached('a')" (click)="addToThali(item.title, item.price,1,'', item.type)" class="add-to-cart">+</p></button>
+          </div>
+        </div>
+
+      </div>
+
+    </ion-scroll>
+
+  </div>
+  <div *ngIf="thaliCondition()" class="cart-bill-style">
+    <div class="cart-bill-card">
+      <b>Summary</b>
+      <ion-grid>
+        <ion-row>
+          <ion-col class="cart-description">
+            Item total
+          </ion-col>
+          <ion-col class="cart-price">
+            &#x20b9;{{thaliPrice()}}
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col class="cart-description">
+            Discount
+          </ion-col>
+          <ion-col class="cart-price">
+            &#x20b9;{{discountOnThali()}}
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col class="cart-description">
+            <b>To Pay</b>
+          </ion-col>
+          <ion-col class="cart-price">
+            <b>&#x20b9;{{thaliPriceTotal()}}</b>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col class="cart-description">
+            * Taxes extra
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+  </div>
+
+
+
+  <div class="thali-buttons">
+
+    <div class="row">
+      <div claass="col col-50">
+        <button class="dismiss-thali" ion-button outline small (click)="  dismiss()">Dismiss</button>
+      </div>
+      <div claass="col col-50">
+        <button [disabled]="!thaliCondition()" class="confirm-thali" ion-button outline color="secondary" small (click)="  confirmThali()">Confirm</button>
+      </div>
+    </div>
+
+
+  </div>
+
+</ion-content>

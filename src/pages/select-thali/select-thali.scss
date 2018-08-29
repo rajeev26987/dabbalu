@@ -1,0 +1,139 @@
+page-select-thali {
+
+  ion-scroll[scrollX] {
+    white-space: nowrap;
+
+    .scroll-item {
+      display: inline-block;
+    }
+  }
+
+  .select-addon-block {
+    height: 250px;
+  }
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
+
+  .cart-bill-style {
+    padding-top: 20px;
+    border-top: solid 2px #eae4e4
+  }
+
+  .add-to-cart {
+    padding-left: 20px;
+    padding-right: 5px;
+    text-align: right;
+    font-size: large;
+  }
+
+  .remove-from-cart {
+    padding-right: 20px;
+    padding-left: 5px;
+    text-align: left;
+    font-size: 25px;
+  }
+
+  .add-cart-button {
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+
+  .add-remove-cart-button {
+    padding: 0;
+  }
+
+  .cart-quant {
+    width: 20px;
+  }
+
+  .disable-add {
+    color: lightgrey;
+  }
+
+  .addon-div {
+    padding-top: 20px;
+
+  }
+
+  .addon-div-header {
+    font-size: 110%;
+  }
+
+  .dashed-border-wrap {
+  }
+
+  .thali-condition-msg {
+    padding: 50px;
+  }
+
+  .dashed-border {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    width: 100%;
+    min-height: 70px;
+    border: dashed;
+    border-color: lightgrey;
+    padding: 10px;
+    text-align: center;
+  }
+
+  .center {
+    margin: auto;
+    width: 100%;
+    min-height: 70px;
+    padding: 10px;
+    text-align: center;
+  }
+
+  .item-complete {
+    border: 3px solid #73AD21;
+  }
+
+  .item-pending {
+    border: 3px solid #dbc51a;
+  }
+
+  .item-exceed {
+    border: 3px solid #ff0000;
+  }
+
+  .item-pending {
+  }
+
+  .app-alert-danger {
+    width: 80%;
+    min-height: 30px;
+    margin: 10px;
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+    padding: 5px;
+    text-align: center;
+  }
+
+
+  .thali-buttons {
+    padding-top: 20px;
+  }
+
+  .dismiss-thali {
+  }
+
+  .confirm-thali {
+  }
+}
+ion-modal.thali-custom-popup ion-backdrop {
+  visibility: visible !important;
+  z-index: 0;
+}
+
+ion-modal.thali-custom-popup .modal-wrapper {
+  bottom: 0%;
+  width: 100%;
+  height: 500px;
+  position: absolute;
+}
