@@ -1,0 +1,16 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\src",
+    "\\src\\app",
+    "\\src\\assets",
+    "\\src\\assets\\imgs",
+    "\\src\\pages",
+    "\\src\\pages\\home",
+    "\\src\\pages\\sel-thali-menu",
+    "\\src\\pages\\select-thali",
+    "\\src\\pages\\set-quant"
+  ],
+  "SelectedNode": "\\src\\pages\\home\\home.ts",
+  "PreviewInSolutionExplorer": false
+}
