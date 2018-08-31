@@ -16,14 +16,15 @@ import { ThaliProvider } from '../../providers/app/thali';
   templateUrl: 'set-thali-quant.html',
 })
 export class SetThaliQuantPage {
-  myItem: string;
+  myItem: number;
+  myItemName: string;
   myPrice: number;
   myType: string;
   myThali: boolean;
   itemObj: any;
   itemSize: string[];
   itemPrice: number[];
-  itemList: Array<{ item: string, size: string, price: number, quant: number, date: Date, type: string }>;
+  itemList: Array<{ item: number,item_name: string, size: string, price: number, quant: number, date: Date, type: string }>;
   curr_sel_date: Date;
   menu_type: string;
   item_no: number;
@@ -31,6 +32,7 @@ export class SetThaliQuantPage {
   constructor(public navCtrl: NavController, public navParams: NavParams, public renderer: Renderer, public viewCtrl: ViewController, public appService: AppProvider, public thaliProvider: ThaliProvider) {
     this.renderer.setElementClass(viewCtrl.pageRef().nativeElement, 'custom-popup', true);
     this.myItem = navParams.get('item');
+    this.myItemName = navParams.get('item_name');
     this.myPrice = navParams.get('price');
     this.myType = navParams.get('type');
     this.myThali = navParams.get('thali');
@@ -57,7 +59,8 @@ export class SetThaliQuantPage {
     this.curr_sel_date = this.get_curr_sel_date();
     for (let i = 0; i < this.itemSize.length; i++) {
       this.itemList.push({
-        item:  this.myItem,
+        item: this.myItem,
+        item_name: this.myItemName,
         size:  this.itemSize[i],
         price: this.itemPrice[i],
         quant: this.getItemQuantInThali(this.myItem, this.itemSize[i]),
@@ -98,8 +101,8 @@ export class SetThaliQuantPage {
     return this.appService.getItemQuantInCart(item, size);
   }
 
-  addToCart(item, price, quant, size, type) {
-    this.appService.addToCart(item, price, quant, size, type);
+  addToCart(item, item_name, price, quant, size, type, sub_item) {
+    this.appService.addToCart(item, item_name, price, quant, size, type, sub_item);
     let index = this.checkItemInItemList(item, size);
     if (index >= 0) {
       this.itemList[index].quant = this.getItemQuantInCart(item, size);
@@ -117,9 +120,9 @@ export class SetThaliQuantPage {
     return this.thaliProvider.getItemQuantInThali(item, size);
   }
 
-  addToThali(item, price, quant, size, type, flag?) {
+  addToThali(item, item_name, price, quant, size, type, flag?) {
     if (!this.maxItemReached()) {
-      this.thaliProvider.addToThali(item, price, quant, size, type, flag);
+      this.thaliProvider.addToThali(item, item_name, price, quant, size, type, flag);
 
       let index = this.checkItemInItemList(item, size);
       if (index >= 0) {

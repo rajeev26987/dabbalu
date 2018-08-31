@@ -28,7 +28,7 @@
       <p *ngIf="cartQuantityForThaliItemType('r') > 0">
 
         <li *ngFor="let item of getThaliListForItemType('r')">
-          {{item.item + " (" + item.size +") - "+ item.quant }}
+          {{item.item_name + " (" + item.size +") - "+ item.quant }}
         </li>
 
         <ion-chip [hidden]="thaliItemCondition('r')" color="danger">
@@ -51,7 +51,7 @@
       <p *ngIf="cartQuantityForThaliItemType('c') > 0">
 
         <li *ngFor="let item of getThaliListForItemType('c')">
-          {{item.item + " (" + item.size +") - "+ item.quant }}
+          {{item.item_name + " (" + item.size +") - "+ item.quant }}
         </li>
 
         <ion-chip [hidden]="thaliItemCondition('c')" color="danger">
@@ -70,17 +70,17 @@
         <ion-card class="card-background-page">
           <img src="{{item.icon}}" />
         </ion-card>
-        <div class="card-title">{{item.title}}</div>
+        <div class="card-title">{{item.item_name}}</div>
         <div class="card-subtitle">{{item.note}}</div>
         <div class="row">
           <div class="col col-50 card-price">&#x20b9;{{item.price}}</div>
           <div [hidden]="item.type =='a'" class="col col-50">
-            <button [disabled]="maxItemReached('a')" [hidden]="cartQuantityForThaliItem(item.title) > 0" ion-button outline small (click)="openSetQuantModal(item.title, item.price, item.type)" class="add-cart-button">Add</button>
-            <button [hidden]="cartQuantityForThaliItem(item.title) <= 0" (click)="openSetQuantModal(item.title, item.price, item.type)" class="add-remove-cart-button" ion-button outline small><p class="remove-from-cart">-</p> <p class="cart-quant">{{cartQuantityForThaliItem(item.title)}}</p>   <p [class.disable-add]="maxItemReached('a')" class="add-to-cart">+</p></button>
+            <button [disabled]="maxItemReached('a')" [hidden]="cartQuantityForThaliItem(item.item) > 0" ion-button outline small (click)="openSetQuantModal(item.item, item.price, item.type)" class="add-cart-button">Add</button>
+            <button [hidden]="cartQuantityForThaliItem(item.item) <= 0" (click)="openSetQuantModal(item.item, item.price, item.type)" class="add-remove-cart-button" ion-button outline small><p class="remove-from-cart">-</p> <p class="cart-quant">{{cartQuantityForThaliItem(item.item)}}</p>   <p [class.disable-add]="maxItemReached('a')" class="add-to-cart">+</p></button>
           </div>
           <div [hidden]="item.type !='a'" class="col col-50">
-            <button [disabled]="maxItemReached('a')" [hidden]="cartQuantityForThaliItem(item.title) > 0" ion-button outline small (click)="addToThali(item.title, item.price,1,'', item.type)" class="add-cart-button">Add</button>
-            <button [hidden]="cartQuantityForThaliItem(item.title) <= 0" class="add-remove-cart-button" ion-button outline small><p (click)="removeFromThali(item.title,'')" class="remove-from-cart">-</p> <p class="cart-quant">{{cartQuantityForThaliItem(item.title)}}</p>   <p [class.disable-add]="maxItemReached('a')" (click)="addToThali(item.title, item.price,1,'', item.type)" class="add-to-cart">+</p></button>
+            <button [disabled]="maxItemReached('a')" [hidden]="cartQuantityForThaliItem(item.item) > 0" ion-button outline small (click)="addToThali(item.item, item.item_name, item.price,1,'', item.type)" class="add-cart-button">Add</button>
+            <button [hidden]="cartQuantityForThaliItem(item.item) <= 0" class="add-remove-cart-button" ion-button outline small><p (click)="removeFromThali(item.item,'')" class="remove-from-cart">-</p> <p class="cart-quant">{{cartQuantityForThaliItem(item.item)}}</p>   <p [class.disable-add]="maxItemReached('a')" (click)="addToThali(item.item, item.item_name, item.price,1,'', item.type)" class="add-to-cart">+</p></button>
           </div>
         </div>
 

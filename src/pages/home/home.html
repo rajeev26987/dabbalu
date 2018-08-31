@@ -25,16 +25,16 @@
       <ion-grid>
         <ion-row *ngFor="let citem of getCartWithDate()">
           <ion-col col-6 class="cart-description">
-            <div>{{citem.item }}</div>
+            <div>{{citem.item_name }}</div>
             <div [hidden]="citem.size ==''">({{citem.size }})</div>
             <div [hidden]="citem.sub_item.length == 0">
               <div class="sub-item" *ngFor="let sitem of citem.sub_item">
-                {{sitem.item}} <span [hidden]="sitem.size ==''"> ({{citem.size }})</span>
+                {{sitem.item_name}} <span [hidden]="sitem.size ==''"> ({{sitem.size }})</span>
               </div>
             </div>
           </ion-col>
           <ion-col>
-            <button ion-button outline small class="add-remove-cart-button"><p class="remove-from-cart" (click)="removeFromCart(citem.item,citem.size)">-</p> <p class="cart-quant">{{citem.quant}}</p> <p class="add-to-cart" (click)="addToCart(citem.item,citem.price,1,citem.size,citem.type,'i')">+</p></button>
+            <button ion-button outline small class="add-remove-cart-button"><p class="remove-from-cart" (click)="removeFromCart(citem.item,citem.size)">-</p> <p class="cart-quant">{{citem.quant}}</p> <p class="add-to-cart" (click)="addToCart(citem.item,citem.item_name,citem.price,1,citem.size,citem.type,citem.sub_item,'i')">+</p></button>
           </ion-col>
           <ion-col align-self-center class="cart-price">
             &#x20b9;{{citem.price * citem.quant }}
@@ -104,17 +104,17 @@
           <ion-card class="card-background-page">
             <img src="{{item.icon}}" />
           </ion-card>
-          <div class="card-title">{{item.title}}</div>
+          <div class="card-title">{{item.item_name}}</div>
           <div class="card-subtitle">{{item.note}}</div>
           <div class="row">
             <div class="col col-50 card-price">&#x20b9;{{item.price}}</div>
             <div [hidden]="item.type=='a'" class="col col-50">
-              <button [hidden]="cartQuantityForItem(item.title) > 0" ion-button outline small (click)="openSetQuantModal(item.title, item.price, item.type)" class="add-cart-button">Add</button>
-              <button [hidden]="cartQuantityForItem(item.title) <= 0" (click)="openSetQuantModal(item.title, item.price, item.type)" class="add-remove-cart-button" ion-button outline small><p class="remove-from-cart">-</p> <p class="cart-quant">{{cartQuantityForItem(item.title)}}</p>   <p class="add-to-cart">+</p></button>
+              <button [hidden]="cartQuantityForItem(item.item) > 0" ion-button outline small (click)="openSetQuantModal(item.item, item.item_name, item.price, item.type)" class="add-cart-button">Add</button>
+              <button [hidden]="cartQuantityForItem(item.item) <= 0" (click)="openSetQuantModal(item.item, item.item_name, item.price, item.type)" class="add-remove-cart-button" ion-button outline small><p class="remove-from-cart">-</p> <p class="cart-quant">{{cartQuantityForItem(item.item)}}</p>   <p class="add-to-cart">+</p></button>
             </div>
             <div [hidden]="item.type !='a'" class="col col-50">
-              <button [hidden]="cartQuantityForItem(item.title) > 0" ion-button outline small (click)="addToCart(item.title, item.price,1,'', item.type)" class="add-cart-button">Add</button>
-              <button [hidden]="cartQuantityForItem(item.title) <= 0" class="add-remove-cart-button" ion-button outline small><p (click)="removeFromCart(item.title,'')" class="remove-from-cart">-</p> <p class="cart-quant">{{cartQuantityForItem(item.title)}}</p>   <p (click)="addToCart(item.title, item.price,1,'', item.type)" class="add-to-cart">+</p></button>
+              <button [hidden]="cartQuantityForItem(item.item) > 0" ion-button outline small (click)="addToCart(item.item,item.item_name, item.price,1,'',[], item.type)" class="add-cart-button">Add</button>
+              <button [hidden]="cartQuantityForItem(item.item) <= 0" class="add-remove-cart-button" ion-button outline small><p (click)="removeFromCart(item.item,'')" class="remove-from-cart">-</p> <p class="cart-quant">{{cartQuantityForItem(item.item)}}</p>   <p (click)="addToCart(item.item,item.item_name, item.price,1,'',[], item.type)" class="add-to-cart">+</p></button>
             </div>
           </div>
         </ion-col>

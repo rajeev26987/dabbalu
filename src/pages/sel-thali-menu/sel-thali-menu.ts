@@ -77,8 +77,8 @@ export class SelThaliMenuPage {
     return this.appService.get_curr_sel_day();
   }
 
-  openSetQuantModal(item, price, type) {
-    let modal = this.modalCtrl.create(SetThaliQuantPage, { item: item, price: price, menu_type: this.menu_type, item_no: this.item_no, thali: true, type: type, itemObj: this.getThali() }, { showBackdrop: true, enableBackdropDismiss: true });
+  openSetQuantModal(item, item_name, price, type) {
+    let modal = this.modalCtrl.create(SetThaliQuantPage, { item: item, item_name: item_name, price: price, menu_type: this.menu_type, item_no: this.item_no, thali: true, type: type, itemObj: this.getThali() }, { showBackdrop: true, enableBackdropDismiss: true });
     modal.present();
   }
   dismiss() {
@@ -123,9 +123,9 @@ export class SelThaliMenuPage {
     return this.appService.cartPriceTotal();
   }
 
-  addToCart(item, price, quant, size, type) {
+  addToCart(item, item_name, price, quant, size, type, sub_item) {
 
-    this.appService.addToCart(item, price, quant, size, type);
+    this.appService.addToCart(item, item_name, price, quant, size, type, sub_item);
   }
 
   removeFromCart(item, size) {
@@ -136,9 +136,9 @@ export class SelThaliMenuPage {
     return this.appService.cartQuantityForItem(item);
   }
 
-  addToThali(item, price, quant, size, type, flag?) {
+  addToThali(item, item_name, price, quant, size, type, flag?) {
     if (!this.maxItemReached()) {
-      this.thaliProvider.addToThali(item, price, quant, size, type, flag);
+      this.thaliProvider.addToThali(item, item_name, price, quant, size, type, flag);
     }
  
   }

@@ -75,9 +75,9 @@ export class HomePage{
     return this.appService.cartPriceTotal();
   }
 
-   addToCart(item,price,quant,size, type){
+   addToCart(item,item_name,price,quant,size, type, sub_item){
 
-     this.appService.addToCart(item, price, quant, size, type);
+     this.appService.addToCart(item, item_name, price, quant, size, type, sub_item);
    }
 
    removeFromCart(item, size){
@@ -88,8 +88,8 @@ export class HomePage{
     return this.appService.cartQuantityForItem(item);
   }
 
-  openSetQuantModal(item,price, type) {
-    let modal = this.modalCtrl.create(SetQuantPage, { item: item, price: price, thali: false, type:type, itemObj:""}, { showBackdrop: true, enableBackdropDismiss: true });
+  openSetQuantModal(item, item_name, price, type) {
+    let modal = this.modalCtrl.create(SetQuantPage, { item: item, item_name: item_name, price: price, thali: false, type:type, itemObj:""}, { showBackdrop: true, enableBackdropDismiss: true });
     modal.present();
   }
 
@@ -100,7 +100,7 @@ export class HomePage{
   }
 
  
-    selectQuantity(item,price,quant,size, type) {
+    selectQuantity(item,item_name,price,quant,size, type, sub_item) {
         let alert = this.alertCtrl.create({
             title: 'Quantity',
             inputs : [
@@ -128,7 +128,7 @@ export class HomePage{
                 text: 'Add',
 
                     handler: data => {
-                        this.addToCart(item,price,quant,data, type);
+                        this.addToCart(item,item_name,price,quant,data, type, sub_item);
                         console.log('Cancel clicked '+data + " "+item + " "+price + " "+quant);
                     }
 

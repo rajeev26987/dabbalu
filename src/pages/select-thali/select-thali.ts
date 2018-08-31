@@ -49,7 +49,7 @@ export class SelectThaliPage {
 
   confirmThali() {
     let obj = this.getThali();
-    this.appService.confirmThali("Thali", this.thaliPriceTotal(), 1, this.size, "t", obj);
+    this.appService.confirmThali(100,"Thali", this.thaliPriceTotal(), 1, this.size, "t", obj);
     this.dismiss();
 
   }
@@ -121,9 +121,9 @@ export class SelectThaliPage {
   getThaliListForItemType(type) {
    return this.thaliProvider.getThaliListForItemType(type);
   }
-  addToThali(item, price, quant, size, type, flag?) {
+  addToThali(item, item_name, price, quant, size, type, flag?) {
     if (!this.maxItemReached('a')) {
-      this.thaliProvider.addToThali(item, price, quant, size, type, flag);
+      this.thaliProvider.addToThali(item, item_name, price, quant, size, type, flag);
     }
 
   }

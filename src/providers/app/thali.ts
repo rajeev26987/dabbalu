@@ -13,7 +13,7 @@ import { stagger } from '@angular/core/src/animation/dsl';
 @Injectable()
 export class ThaliProvider {
  
-  thali_item: Array<{ item: string, price: number, size: string, quant: number, type: string }>;
+  thali_item: Array<{ item: number, item_name:string, price: number, size: string, quant: number, type: string }>;
   discount_per: number;
 
   constructor(private http: HttpClient) {
@@ -63,7 +63,7 @@ export class ThaliProvider {
    
   }
 
-  addToThali(item, price, quant, size, type, flag?) {
+  addToThali(item, item_name, price, quant, size, type, flag?) {
 
     if (flag == "i") { }
     else {
@@ -94,6 +94,7 @@ export class ThaliProvider {
     else {
       this.thali_item.push({
         item: item,
+        item_name: item_name,
         price: price,
         size: size,
         quant: quant,

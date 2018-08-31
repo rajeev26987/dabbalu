@@ -17,7 +17,7 @@ export class AppProvider {
     price: number[];
     item_type: string[];
     all_item: string[];
-    cart_items: Array<{ item: string, price: number, size: string, quant: number, date: Date, type: string, sub_item: Array<{ item: string, price: number, size: string, quant: number, type: string}>}>;
+    cart_items: Array<{ item: number, item_name: string, price: number, size: string, quant: number, date: Date, type: string, sub_item: Array<{ item: number, item_name: string, price: number, size: string, quant: number, type: string}>}>;
 
   menu_items: any;
   menu_init: number;
@@ -267,10 +267,20 @@ export class AppProvider {
     }
   }
 
-  confirmThali(item, price, quant, size,type,subObj) {
+  sameObj(arr1, arr2) {
+    if (JSON.stringify(arr1.sort()) === JSON.stringify(arr2.sort())) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
+  confirmThali(item, item_name, price, quant, size,type,subObj) {
     let pThis = this;
+    subObj.sort();
     let myIndex = this.cart_items.findIndex(function (obj) {
-      return (obj.item === item && obj.size === size && obj.date == pThis.cur_sel_date && subObj == obj.sub_item);
+      return (obj.item === item && obj.size === size && obj.date == pThis.cur_sel_date && pThis.sameObj(obj.sub_item, subObj));
     });
     console.log("my index " + myIndex);
 
@@ -281,6 +291,7 @@ export class AppProvider {
     else {
       this.cart_items.push({
         item: item,
+        item_name: item_name,
         price: price,
         size: size,
         quant: quant,
@@ -314,7 +325,10 @@ export class AppProvider {
   }
    
    
-   addToCart(item,price,quant,size,type,flag?){
+  addToCart(item, item_name, price, quant, size, type, sub_item, flag?) {
+    if (!Array.isArray(sub_item)) {
+      sub_item = [];
+    }
 
      console.log("print " + item + " " + price + " " + quant + " " + size + " " + this.cur_sel_date);
      if (flag == "i") { }
@@ -332,7 +346,7 @@ export class AppProvider {
      }
      let pThis = this;
     let myIndex =   this.cart_items.findIndex(function(obj) {
-      return (obj.item === item && obj.size === size && obj.date == pThis.cur_sel_date);
+      return (obj.item === item && obj.size === size && obj.date == pThis.cur_sel_date && pThis.sameObj(obj.sub_item, sub_item));
        });
     console.log("my index "+myIndex);
 
@@ -343,12 +357,13 @@ export class AppProvider {
         else{
           this.cart_items.push({
             item: item,
+            item_name: item_name,
             price: price,
             size: size,
             quant: quant,
             date: this.cur_sel_date,
             type: type,
-            sub_item: []
+            sub_item: sub_item
             });
         }
      localStorage.setItem("cart", JSON.stringify(this.cart_items));

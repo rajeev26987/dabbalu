@@ -20,8 +20,8 @@ export class ContactPage{
     return this.appService.getCart();
   }
 
-  addToCart(item, price, quant, size, type, flag) {
-    return this.appService.addToCart(item, price, quant, size, type, flag)
+  addToCart(item, item_name, price, quant, size, type, sub_item, flag) {
+    return this.appService.addToCart(item, item_name, price, quant, size, type, sub_item, flag)
   }
 
   removeFromCart(item, size) {
