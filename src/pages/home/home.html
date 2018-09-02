@@ -11,6 +11,9 @@
         <div class="date-block">
           {{dt.date}}
         </div>
+
+          <div [class.circle]="CartLengthForDate(dt.date_obj)" [class.no-circle]="!CartLengthForDate(dt.date_obj)">
+          </div>
       </div>
     </div>
   </ion-scroll>
@@ -28,7 +31,7 @@
         <ion-grid>
           <ion-row *ngFor="let citem of getCartWithDate()">
             <ion-col col-6 class="cart-description">
-              <div>{{citem.item_name }}</div>
+              <div><ion-icon [class.item-non-veg]="citem.p_veg==0" [class.item-veg]="citem.p_veg==1" ios="ios-radio-button-on" md="md-radio-button-on"></ion-icon> {{citem.item_name }}</div>
               <div [hidden]="citem.size ==''">({{citem.size }})</div>
               <div [hidden]="citem.sub_item.length == 0">
                 <div class="sub-item" *ngFor="let sitem of citem.sub_item">
@@ -161,13 +164,13 @@
             <ion-card class="card-background-page">
               <img src="{{item.icon}}" />
             </ion-card>
-            <div class="card-title">{{item.item_name}}</div>
+            <div class="card-title"><ion-icon  [class.item-non-veg]="item.p_veg==0" [class.item-veg]="item.p_veg==1" ios="ios-radio-button-on" md="md-radio-button-on"></ion-icon> {{item.item_name}}</div>
             <div class="card-subtitle">{{item.note}}</div>
             <div class="row">
               <div class="col col-50 card-price">&#x20b9;{{item.price}}</div>
               <div [hidden]="item.type=='a'" class="col col-50">
-                <button [hidden]="cartQuantityForItem(item.item) > 0" ion-button outline small (click)="openSetQuantModal(item.item, item.item_name, item.price, item.type, item.ps_type, item.ps_type_val)" class="add-cart-button">Add</button>
-                <button [hidden]="cartQuantityForItem(item.item) <= 0" (click)="openSetQuantModal(item.item, item.item_name, item.price, item.type, item.ps_type, item.ps_type_val)" class="add-remove-cart-button" ion-button outline small><p class="remove-from-cart">-</p> <p class="cart-quant">{{cartQuantityForItem(item.item)}}</p>   <p class="add-to-cart">+</p></button>
+                <button [hidden]="cartQuantityForItem(item.item) > 0" ion-button outline small (click)="openSetQuantModal(item)" class="add-cart-button">Add</button>
+                <button [hidden]="cartQuantityForItem(item.item) <= 0" (click)="openSetQuantModal(item)" class="add-remove-cart-button" ion-button outline small><p class="remove-from-cart">-</p> <p class="cart-quant">{{cartQuantityForItem(item.item)}}</p>   <p class="add-to-cart">+</p></button>
               </div>
               <div [hidden]="item.type !='a'" class="col col-50">
                 <button [hidden]="cartQuantityForItem(item.item) > 0" ion-button outline small (click)="addToCart(item)" class="add-cart-button">Add</button>

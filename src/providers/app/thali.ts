@@ -13,12 +13,27 @@ import { stagger } from '@angular/core/src/animation/dsl';
 @Injectable()
 export class ThaliProvider {
  
-  thali_item: Array<{ item: number, item_name:string, price: number, size: string, quant: number, type: string }>;
+  thali_item: Array<{ item: number, item_name: string, price: number, size: string, quant: number, type: string, p_veg: boolean, ps_type: string, ps_size_id: number, ps_quant: number, ps_unit: string }>;
   discount_per: number;
+  veg_ind: boolean;
 
   constructor(private http: HttpClient) {
     this.discount_per = 0.05;
+    this.veg_ind = true;
 
+  }
+
+  vegInd() {
+
+    let myIndex = this.thali_item.findIndex(function (obj) {
+      return (obj.p_veg === false);
+    });
+    if (myIndex >=0) {
+      return false;
+    }
+    else {
+      return true;
+    }
   }
 
   clearThaliItem() {
@@ -65,7 +80,7 @@ export class ThaliProvider {
    
   }
 
-  addToThali(item, item_name, price, quant, size, type) {
+  addToThali(item, item_name, price, quant, size, type, p_veg, ps_type, ps_size_id, ps_quant, ps_unit) {
 
     let pThis = this;
     let myIndex = this.thali_item.findIndex(function (obj) {
@@ -84,7 +99,12 @@ export class ThaliProvider {
         price: price,
         size: size,
         quant: quant,
-        type: type
+        type: type,
+        p_veg: p_veg,
+        ps_type: ps_type,
+        ps_size_id: ps_size_id,
+        ps_quant: ps_quant,
+        ps_unit: ps_unit
       });
     }
 

@@ -18,16 +18,16 @@ export class AppProvider {
     price: number[];
     item_type: string[];
     all_item: string[];
-    cart_items: Array<{ item: number, item_name: string, price: number, discount:number, discount_per: number, size: string, quant: number, date: Date, type: string, sub_item: Array<{ item: number, item_name: string, price: number, size: string, quant: number, type: string}>}>;
+  cart_items: Array<{ item: number, item_name: string, price: number, discount: number, discount_per: number, size: string, quant: number, date: number, type: string, p_veg: boolean, ps_type: string, ps_size_id: number,ps_quant: number, ps_unit:string, sub_item: Array<{ item: number, item_name: string, price: number, size: string, quant: number, type: string, p_veg: boolean, ps_type: string, ps_size_id: number,ps_quant: number, ps_unit:string}>}>;
 
   menu_items: any;
   menu_init: number;
   tax_per: number;
   deliver_ch: number;
   dates: Date[];
-  myDates: Array<{ day: string, date: number, date_num: number, date_obj:Date, flag: boolean, sel: boolean }>;
+  myDates: Array<{ day: string, date: number, date_num: number, date_obj:number, flag: boolean, sel: boolean }>;
   weekDay: string[];
-  cur_sel_date: Date;
+  cur_sel_date: number;
   monthNames: string[];
   loader: any;
  // default_sub_item: { item: string, price: number, size: string, quant: number };
@@ -36,21 +36,18 @@ export class AppProvider {
   constructor(private http: HttpClient, public loadingCtrl: LoadingController) {
    
     this.menu_init = 0;
-    let savedCart = localStorage.getItem("cart");
+    localStorage.setItem("cart", "");
+    this.cart_items = [];
 
-    if (savedCart != "") {
-      this.cart_items = JSON.parse(savedCart);
-    }
-    else {
-      this.cart_items = [];
-    }
 
     this.tax_per = 0.12;
     this.deliver_ch = 0;
  //   this.default_sub_item = {item: 'e', price: 0, size: 'e', quant: 0};
 
     let start = new Date();
+    let start_num = this.formatDate(start);
     let end = new Date(start.getFullYear(), start.getMonth() + 1, 0);
+    let end_num = this.formatDate(end);
     end = (start.getDate() > 24) ? new Date(start.getFullYear(), start.getMonth() + 2, 0) : end;
     this.myDates = [];
     this.weekDay = ["SUN", "MON", "TUES", "WED", "THU", "FRI", "SAT"];
@@ -62,13 +59,13 @@ export class AppProvider {
     let sel = flag;
     let sel_flag = sel;
     let counter = 0;
-    if (sel) { this.cur_sel_date = start };
+    if (sel) { this.cur_sel_date = start_num };
 
     this.myDates.push({
       day: "TODAY",
       date: start.getDate(),
-      date_num: this.formatDate(start),
-      date_obj: start,
+      date_num: start_num,
+      date_obj: start_num,
       flag: flag,
       sel: sel
     })
@@ -76,23 +73,23 @@ export class AppProvider {
     next_date.setDate(start.getDate() + ++counter);
     flag = (next_date.getDay() == 0 || next_date.getDay() == 6) ? false : true;
     sel = sel_flag ? false : flag;
-    if (sel) { this.cur_sel_date = next_date };
+    if (sel) { this.cur_sel_date = this.formatDate(next_date) };
     sel_flag = sel_flag ? true : sel;
     this.myDates.push({
       day: "TOMORROW",
       date: next_date.getDate(),
       date_num: this.formatDate(next_date),
-      date_obj: next_date,
+      date_obj: this.formatDate(next_date),
       flag: flag,
       sel: sel
     })
 
-    while (this.myDates[this.myDates.length - 1].date_obj < end) {
+    while (this.myDates[this.myDates.length - 1].date_obj < end_num) {
       let my_next_date = new Date();
       my_next_date.setDate(start.getDate() + ++counter);      
       flag = (my_next_date.getDay() == 0 || my_next_date.getDay() == 6) ? false : true;
       sel = sel_flag ? false : flag;
-      if (sel) { this.cur_sel_date = my_next_date };
+      if (sel) { this.cur_sel_date = this.formatDate(my_next_date) };
       sel_flag = sel_flag ? true : sel;
       
 
@@ -100,14 +97,14 @@ export class AppProvider {
         day: this.weekDay[my_next_date.getDay()],
         date: my_next_date.getDate(),
         date_num: this.formatDate(my_next_date),
-        date_obj: my_next_date,
+        date_obj: this.formatDate(my_next_date),
         flag: flag,
         sel: sel
       })
 
     }
 
-    console.log("curr day " + this.cur_sel_date.getDay());
+    console.log("curr day " + this.cur_sel_date);
   }
 
   menuInitialized() {
@@ -136,6 +133,8 @@ export class AppProvider {
       );
     }
   }
+
+
 
   getMenuItem(day) {
   
@@ -180,8 +179,14 @@ export class AppProvider {
     return this.cart_items
   }
 
-  getCartWithDate() {
-    return this.cart_items.filter(item => item.date == this.cur_sel_date);
+  getCartWithDate(date?) {
+    if (date) {
+      return this.cart_items.filter(item => item.date == date);
+    }
+    else {
+      return this.cart_items.filter(item => item.date == this.cur_sel_date);
+    }
+    
   }
   
     CartLength(){
@@ -189,8 +194,14 @@ export class AppProvider {
     }
 
 
-  CartLengthForDate() {
-    return this.getCartWithDate().length;
+  CartLengthForDate(date?) {
+    if (date) {
+      return this.getCartWithDate(date).length;
+    }
+    else {
+      return this.getCartWithDate().length;
+    }
+   
   }
 
   checkItemInCart(item, size) {
@@ -292,7 +303,7 @@ export class AppProvider {
     }
   }
 
-  confirmThali(item, item_name, price, discount, discount_per, quant, size,type,subObj) {
+  confirmThali(item, item_name, price, discount, discount_per, quant, size, type, p_veg, ps_type, ps_size_id, ps_quant, ps_unit, subObj) {
     let pThis = this;
     subObj.sort();
     let myIndex = this.cart_items.findIndex(function (obj) {
@@ -315,6 +326,11 @@ export class AppProvider {
         quant: quant,
         date: this.cur_sel_date,
         type: type,
+        p_veg: p_veg,
+        ps_type: ps_type,
+        ps_size_id: ps_size_id,
+        ps_quant: ps_quant,
+        ps_unit: ps_unit,
         sub_item: subObj
       });
     }
@@ -359,7 +375,7 @@ export class AppProvider {
   }
    
    
-  addToCart(item, item_name, price, discount, discount_per, quant, size, type, sub_item) {
+  addToCart(item, item_name, price, discount, discount_per, quant, size, type, p_veg, ps_type, ps_size_id, ps_quant, ps_unit, sub_item) {
     if (!Array.isArray(sub_item)) {
       sub_item = [];
     }
@@ -387,11 +403,16 @@ export class AppProvider {
             quant: quant,
             date: this.cur_sel_date,
             type: type,
+            p_veg: p_veg,
+            ps_type: ps_type,
+            ps_size_id: ps_size_id,
+            ps_quant: ps_quant,
+            ps_unit: ps_unit,
             sub_item: sub_item
             });
         }
      localStorage.setItem("cart", JSON.stringify(this.cart_items));
-     console.log("cart " + JSON.stringify(this.cart_items));
+     console.log("carttt " + JSON.stringify(this.cart_items));
    }
 
   removeFromCart(item, size) {
@@ -408,6 +429,7 @@ export class AppProvider {
       else {
         this.cart_items.splice(index, 1);
       }
+    
       localStorage.setItem("cart", JSON.stringify(this.cart_items));
     }
   }
@@ -419,7 +441,9 @@ export class AppProvider {
     return this.cur_sel_date;
   }
   get_curr_sel_day() {
-    return this.cur_sel_date.getDay();
+    let d = this.cur_sel_date + "";
+    let dtObj = new Date(Number(d.substring(0, 4)), Number(d.substring(4,6)) -1 ,Number(d.substring(6,8)))
+    return dtObj.getDay();
   }
   showMenuForDate(cDate, cFlag) {
     if (this.menu_init == 2 || this.menu_init == 0) {
@@ -452,8 +476,8 @@ export class AppProvider {
  }
 
   showDateStr() {
-    var d = this.cur_sel_date,
-      r = d.getDate() + " " + this.monthNames[d.getMonth()];
+    var d = this.cur_sel_date + "",
+      r = d.substring(6,8) + " " + this.monthNames[Number(d.substring(4,6))-1];
     return r;
     
   }

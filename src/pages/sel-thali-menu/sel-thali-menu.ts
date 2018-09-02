@@ -77,8 +77,15 @@ export class SelThaliMenuPage {
     return this.appService.get_curr_sel_day();
   }
 
-  openSetQuantModal(item, item_name, price, type, ps_type, ps_type_val) {
-    let modal = this.modalCtrl.create(SetThaliQuantPage, { item: item, item_name: item_name, price: price, ps_type:ps_type, ps_type_val: ps_type_val, menu_type: this.menu_type, item_no: this.item_no, thali: true, type: type, itemObj: this.getThali() }, { showBackdrop: true, enableBackdropDismiss: true });
+  openSetQuantModal(itemAll) {
+    let item = itemAll.item,
+      item_name = itemAll.item_name,
+      price = itemAll.price,
+      type = itemAll.type,
+      ps_type = itemAll.ps_type,
+      ps_type_val = itemAll.ps_type_val,
+      p_veg = itemAll.p_veg;
+    let modal = this.modalCtrl.create(SetThaliQuantPage, {itemAll:itemAll, item: item, item_name: item_name, price: price, p_veg:p_veg, ps_type:ps_type, ps_type_val: ps_type_val, menu_type: this.menu_type, item_no: this.item_no, thali: true, type: type, itemObj: this.getThali() }, { showBackdrop: true, enableBackdropDismiss: true });
     modal.present();
   }
   dismiss() {
@@ -108,9 +115,14 @@ export class SelThaliMenuPage {
       price = itemObj.price,
       quant = 1,
       size = itemObj.size,
-      type = itemObj.type;
+      type = itemObj.type,
+      p_veg = itemObj.p_veg,
+      ps_type = itemObj.ps_type,
+      ps_size_id = itemObj.ps_size_id,
+      ps_quant = itemObj.ps_quant,
+      ps_unit = itemObj.ps_unit;
     if (!this.maxItemReached()) {
-      this.thaliProvider.addToThali(item, item_name, price, quant, size, type);
+      this.thaliProvider.addToThali(item, item_name, price, quant, size, type, p_veg, ps_type, ps_size_id, ps_quant, ps_unit);
     }
  
   }

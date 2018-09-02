@@ -46,10 +46,13 @@ export class SelectThaliPage {
   dismiss() {
     this.viewCtrl.dismiss();
   }
+  vegInd() {
+    this.thaliProvider.vegInd();
+  }
 
   confirmThali() {
     let obj = this.getThali();
-    this.appService.confirmThali(100, "Thali", this.thaliPriceTotal(), this.discountOnThali(), this.discountPercent(), 1, this.size, "t", obj);
+    this.appService.confirmThali(100, "Thali", this.thaliPriceTotal(), this.discountOnThali(), this.discountPercent(), 1, this.size, "t", true,"d0",0,0,"", obj);
     this.dismiss();
 
   }
@@ -131,9 +134,14 @@ export class SelectThaliPage {
       price = itemObj.price,
       quant = 1,
       size = itemObj.size,
-      type = itemObj.type;
+      type = itemObj.type,
+      p_veg = itemObj.p_veg,
+      ps_type = itemObj.ps_type,
+      ps_size_id = itemObj.ps_size_id,
+      ps_quant = itemObj.ps_quant,
+      ps_unit = itemObj.ps_unit;
     if (!this.maxItemReached(itemObj.type)) {
-      this.thaliProvider.addToThali(item, item_name, price, quant, size, type);
+      this.thaliProvider.addToThali(item, item_name, price, quant, size, type, p_veg, ps_type, ps_size_id, ps_quant, ps_unit);
     }
 
   }

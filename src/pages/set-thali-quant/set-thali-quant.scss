@@ -32,8 +32,17 @@ page-set-thali-quant {
     padding-left: 5%;
     text-align: right;
   }
-  .disable-add{
-   color: lightgrey;
+
+  .disable-add {
+    color: lightgrey;
+  }
+
+  .item-veg {
+    color: green;
+  }
+
+  .item-non-veg {
+    color: red;
   }
 }
 

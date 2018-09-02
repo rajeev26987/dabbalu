@@ -23,11 +23,12 @@ export class SetQuantPage {
   myType: string;
   ps_type: string;
   ps_type_val: any;
+  p_veg: boolean;
   itemObj: any;
  // itemSize: string[];
   //itemPrice: number[];
-  itemList: Array<{ item: number, item_name: string, size: string, price: number, quant: number, date: Date, type: string }>;
-  curr_sel_date: Date;
+  itemList: Array<{ item: number, item_name: string, size: string, price: number, quant: number, date: number, type: string, p_veg: boolean, ps_type: string, ps_size_id: number, ps_quant: number, ps_unit: string }>;
+  curr_sel_date: number;
 
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public renderer: Renderer, public viewCtrl: ViewController, public appService: AppProvider) {
@@ -40,6 +41,7 @@ export class SetQuantPage {
     this.itemObj = navParams.get('itemObj');
     this.ps_type = navParams.get('ps_type');
     this.ps_type_val = navParams.get('ps_type_val');
+    this.p_veg = navParams.get('p_veg');
 
 
     /*if (this.myType == "r") {
@@ -66,9 +68,18 @@ export class SetQuantPage {
         price: this.ps_type_val[i].ps_price,
         quant: this.getItemQuantInCart(this.myItem, this.ps_type_val[i].sc_size),
         date: this.curr_sel_date,
-        type: this.myType
+        type: this.myType,
+        p_veg: this.p_veg,
+        ps_type: this.ps_type,
+        ps_size_id: this.ps_type_val[i].ps_size_id,
+        ps_quant: this.ps_type_val[i].ps_quant,
+        ps_unit: this.ps_type_val[i].ps_unit
       });
     }
+  }
+
+  dismiss() {
+    this.viewCtrl.dismiss();
   }
 
 
@@ -111,10 +122,15 @@ export class SetQuantPage {
       quant = 1,
       size = itemObj.size,
       type = itemObj.type,
+      p_veg = itemObj.p_veg,
+      ps_type = itemObj.ps_type,
+      ps_size_id = itemObj.ps_size_id,
+      ps_quant = itemObj.ps_quant,
+      ps_unit = itemObj.ps_unit,
       sub_item = itemObj.sub_item;
     
 
-    this.appService.addToCart(item, item_name, price,discount,discount_per, quant, size, type, sub_item);
+    this.appService.addToCart(item, item_name, price, discount, discount_per, quant, size, type, p_veg, ps_type, ps_size_id, ps_quant, ps_unit, sub_item);
     let index = this.checkItemInItemList(item, size);
     if (index >= 0) {
       this.itemList[index].quant = this.getItemQuantInCart(item, size);

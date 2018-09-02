@@ -26,8 +26,8 @@ export class HomePage{
   menuInitialized() {
     return this.appService.menuInitialized();
   }
-  CartLengthForDate() {
-    return this.appService.CartLengthForDate();
+  CartLengthForDate(date?) {
+    return this.appService.CartLengthForDate(date);
   }
 
   getMenuItem(day) {
@@ -87,9 +87,16 @@ export class HomePage{
       quant = 1,
       size = itemObj.size,
       type = itemObj.type,
+      p_veg = itemObj.p_veg,
+      ps_type = itemObj.ps_type,
+      ps_size_id = itemObj.ps_size_id,
+      ps_quant = itemObj.ps_quant,
+      ps_unit = itemObj.ps_unit,
       sub_item = itemObj.sub_item;
 
-     this.appService.addToCart(item, item_name, price, discount,discount_per, quant, size, type, sub_item);
+    console.log("yyyyy " + p_veg, ps_size_id, ps_quant, ps_unit);
+
+    this.appService.addToCart(item, item_name, price, discount, discount_per, quant, size, type, p_veg, ps_type, ps_size_id, ps_quant, ps_unit, sub_item);
    }
 
    removeFromCart(item, size){
@@ -104,8 +111,15 @@ export class HomePage{
     return this.appService.showDateStr();
   }
 
-  openSetQuantModal(item, item_name, price, type, ps_type, ps_type_val) {
-    let modal = this.modalCtrl.create(SetQuantPage, { item: item, item_name: item_name, price: price, thali: false, type:type, ps_type: ps_type, ps_type_val: ps_type_val, itemObj:""}, { showBackdrop: true, enableBackdropDismiss: true });
+  openSetQuantModal(itemAll) {
+    let item = itemAll.item,
+      item_name = itemAll.item_name,
+      price = itemAll.price,
+      type = itemAll.type,
+      ps_type = itemAll.ps_type,
+      ps_type_val = itemAll.ps_type_val,
+      p_veg = itemAll.p_veg;
+    let modal = this.modalCtrl.create(SetQuantPage, {itemAll:itemAll, item: item, item_name: item_name, price: price, p_veg: p_veg, thali: false, type:type, ps_type: ps_type, ps_type_val: ps_type_val, itemObj:""}, { showBackdrop: true, enableBackdropDismiss: true });
     modal.present();
   }
 

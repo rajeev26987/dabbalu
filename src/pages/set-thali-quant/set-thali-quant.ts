@@ -24,11 +24,13 @@ export class SetThaliQuantPage {
   itemObj: any;
   itemSize: string[];
   itemPrice: number[];
-  itemList: Array<{ item: number,item_name: string, size: string, price: number, quant: number, date: Date, type: string }>;
-  curr_sel_date: Date;
+  itemList: Array<{ item: number, item_name: string, size: string, price: number, quant: number, date: number, type: string, p_veg: boolean, ps_type: string, ps_size_id: number, ps_quant: number, ps_unit: string }>;
+  curr_sel_date: number;
   menu_type: string;
   item_no: number;
+  ps_type: string;
   ps_type_val: any;
+  p_veg: boolean;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public renderer: Renderer, public viewCtrl: ViewController, public appService: AppProvider, public thaliProvider: ThaliProvider) {
     this.renderer.setElementClass(viewCtrl.pageRef().nativeElement, 'custom-popup', true);
@@ -41,6 +43,8 @@ export class SetThaliQuantPage {
     this.menu_type = navParams.get('menu_type');
     this.item_no = navParams.get('item_no');
     this.ps_type_val = navParams.get('ps_type_val');
+    this.p_veg = navParams.get('p_veg');
+    this.ps_type = navParams.get('ps_type');
 
 
   /*  if (this.myType == "r") {
@@ -67,10 +71,19 @@ export class SetThaliQuantPage {
         price: this.ps_type_val[i].ps_price,
         quant: this.getItemQuantInThali(this.myItem, this.ps_type_val[i].sc_size),
         date: this.curr_sel_date,
-        type: this.myType
+        type: this.myType,
+        p_veg: this.p_veg,
+        ps_type: this.ps_type,
+        ps_size_id: this.ps_type_val[i].ps_size_id,
+        ps_quant: this.ps_type_val[i].ps_quant,
+        ps_unit: this.ps_type_val[i].ps_unit
       });
     }
 
+  }
+
+  dismiss() {
+    this.viewCtrl.dismiss();
   }
 
   get_curr_sel_date() {
@@ -116,9 +129,15 @@ export class SetThaliQuantPage {
         price = itemObj.price,
         quant = 1,
         size = itemObj.size,
-        type = itemObj.type;
+        type = itemObj.type,
+        p_veg = itemObj.p_veg,
+        ps_type = itemObj.ps_type,
+        ps_size_id = itemObj.ps_size_id,
+        ps_quant = itemObj.ps_quant,
+        ps_unit = itemObj.ps_unit;
 
-      this.thaliProvider.addToThali(item, item_name, price, quant, size, type);
+
+      this.thaliProvider.addToThali(item, item_name, price, quant, size, type, p_veg, ps_type, ps_size_id, ps_quant, ps_unit);
 
       let index = this.checkItemInItemList(item, size);
       if (index >= 0) {

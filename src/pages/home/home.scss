@@ -118,14 +118,12 @@ page-home {
   }
 
   .select-date-block {
- 
     height: 70px;
-    margin-top: 5px;
-    z-index: 10;
+    z-index: 100;
   }
 
   .date-day-block {
-    padding: 10px;
+    padding-top: 10px;
     min-width: 70px;
     text-align: center
   }
@@ -163,7 +161,39 @@ page-home {
     padding-bottom: 10px;
   }
 
-  .cart-bill-card{
+  .cart-bill-card {
     padding-bottom: 10px;
+  }
+
+  .item-veg {
+    color: green;
+  }
+
+  .item-non-veg {
+    color: red;
+  }
+
+
+  .circle {
+    height: 5px;
+    width: 5px;
+    background-color: #e954d4;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  .circle-confirm {
+    height: 5px;
+    width: 5px;
+    background-color: #95b2ed;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  .no-circle {
+    height: 5px;
+    width: 5px;
+    border-radius: 50%;
+    display: inline-block;
   }
 }

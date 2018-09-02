@@ -7,7 +7,12 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>{{myItemName}}</ion-title>
+    <ion-title>
+      <ion-icon [class.item-non-veg]="p_veg==0" [class.item-veg]="p_veg==1" ios="ios-radio-button-on" md="md-radio-button-on"></ion-icon>
+
+      {{myItemName}}
+    </ion-title>
+    <ion-buttons end>  <button  ion-button   small (click)="  dismiss()"><ion-icon name="close" (click)="dismiss()"></ion-icon></button></ion-buttons>
   </ion-navbar>
 
 </ion-header>
