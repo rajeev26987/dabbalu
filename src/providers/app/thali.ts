@@ -43,7 +43,9 @@ export class ThaliProvider {
     return this.thali_item.length;
   }
 
-
+  discountPercent() {
+    return 5;
+  }
   discountOnThali() {
     return Math.round( this.discount_per * this.thaliPrice());
   }
@@ -63,24 +65,8 @@ export class ThaliProvider {
    
   }
 
-  addToThali(item, item_name, price, quant, size, type, flag?) {
+  addToThali(item, item_name, price, quant, size, type) {
 
-    if (flag == "i") { }
-    else {
-      if (size == "medium") {
-        price = price * 1.2;
-      }
-      else if (size == 'large') {
-        price = price * 1.4;
-      }
-      else if (size == 'large') {
-        price = price * 1.4;
-      }
-      else if (size == 'pack of 5' || size == 'full') {
-        price = price * 1.5;
-      }
-      price = Math.round(price);
-    }
     let pThis = this;
     let myIndex = this.thali_item.findIndex(function (obj) {
       return (obj.item === item && obj.size === size);

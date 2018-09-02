@@ -19,6 +19,7 @@ import { SelectThaliPage } from '../pages/select-thali/select-thali';
 import { SelThaliMenuPage } from '../pages/sel-thali-menu/sel-thali-menu';
 import { ThaliProvider } from '../providers/app/thali';
 import { SetThaliQuantPage } from '../pages/set-thali-quant/set-thali-quant';
+import { MyhomePage } from '../pages/myhome/myhome';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { SetThaliQuantPage } from '../pages/set-thali-quant/set-thali-quant';
     AboutPage,
     ContactPage,
       AccountPage,
-      HomePage,
+    HomePage,
+      MyhomePage,
     TabsPage,
     SetQuantPage,
     SetThaliQuantPage,
@@ -45,6 +47,7 @@ import { SetThaliQuantPage } from '../pages/set-thali-quant/set-thali-quant';
     ContactPage,
     AccountPage,
     HomePage,
+    MyhomePage,
     TabsPage,
     SetQuantPage,
     SetThaliQuantPage,

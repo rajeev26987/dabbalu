@@ -20,8 +20,8 @@
         {{item.size}}
       </ion-col>
       <ion-col>
-        <button class="add-cart-button" [hidden]="item.quant > 0" ion-button outline small (click)="addToCart(item.item, item.item_name, item.price, 1, item.size, item.type,item.sub_item)">Add</button>
-        <button class="add-remove-cart-button" [hidden]="item.quant <= 0" ion-button outline icon-end small><p class="remove-from-cart" (click)="removeFromCart(item.item,item.size)">-</p> <p class="cart-quant">{{item.quant}}</p>   <p class="add-to-cart" (click)="addToCart(item.item,item.item_name,item.price,1,item.size, item.type,item.sub_item)">+</p></button>
+        <button class="add-cart-button" [hidden]="item.quant > 0" ion-button outline small (click)="addToCart(item)">Add</button>
+        <button class="add-remove-cart-button" [hidden]="item.quant <= 0" ion-button outline icon-end small><p class="remove-from-cart" (click)="removeFromCart(item.item,item.size)">-</p> <p class="cart-quant">{{item.quant}}</p>   <p class="add-to-cart" (click)="addToCart(item)">+</p></button>
       </ion-col>
       <ion-col class="cart-price" align-self-center>
         {{"₹" + item.price}}

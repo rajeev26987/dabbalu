@@ -77,8 +77,8 @@ export class SelThaliMenuPage {
     return this.appService.get_curr_sel_day();
   }
 
-  openSetQuantModal(item, item_name, price, type) {
-    let modal = this.modalCtrl.create(SetThaliQuantPage, { item: item, item_name: item_name, price: price, menu_type: this.menu_type, item_no: this.item_no, thali: true, type: type, itemObj: this.getThali() }, { showBackdrop: true, enableBackdropDismiss: true });
+  openSetQuantModal(item, item_name, price, type, ps_type, ps_type_val) {
+    let modal = this.modalCtrl.create(SetThaliQuantPage, { item: item, item_name: item_name, price: price, ps_type:ps_type, ps_type_val: ps_type_val, menu_type: this.menu_type, item_no: this.item_no, thali: true, type: type, itemObj: this.getThali() }, { showBackdrop: true, enableBackdropDismiss: true });
     modal.present();
   }
   dismiss() {
@@ -101,44 +101,16 @@ export class SelThaliMenuPage {
     this.appService.showMenuForDate(cDate, cFlag);
   }
 
-  cartQuantity() {
-    return this.appService.cartQuantity()
-  }
 
-  CartLength() {
-    return this.appService.CartLength();
-  }
-  cartPrice() {
-    return this.appService.cartPrice();
-  }
-
-  taxOnCart() {
-    return this.appService.taxOnCart();
-  }
-  delieveryChargeOnCart() {
-    return this.appService.delieveryChargeOnCart();
-  }
-
-  cartPriceTotal() {
-    return this.appService.cartPriceTotal();
-  }
-
-  addToCart(item, item_name, price, quant, size, type, sub_item) {
-
-    this.appService.addToCart(item, item_name, price, quant, size, type, sub_item);
-  }
-
-  removeFromCart(item, size) {
-    this.appService.removeFromCart(item, size)
-  }
-
-  cartQuantityForItem(item) {
-    return this.appService.cartQuantityForItem(item);
-  }
-
-  addToThali(item, item_name, price, quant, size, type, flag?) {
+  addToThali(itemObj) {
+    let item = itemObj.item,
+      item_name = itemObj.item_name,
+      price = itemObj.price,
+      quant = 1,
+      size = itemObj.size,
+      type = itemObj.type;
     if (!this.maxItemReached()) {
-      this.thaliProvider.addToThali(item, item_name, price, quant, size, type, flag);
+      this.thaliProvider.addToThali(item, item_name, price, quant, size, type);
     }
  
   }

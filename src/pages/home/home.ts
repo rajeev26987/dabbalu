@@ -63,6 +63,9 @@ export class HomePage{
   cartPrice() {
     return this.appService.cartPrice();
   }
+  discountOnCart() {
+    return this.appService.discountOnCart();
+  }
 
   taxOnCart() {
     return this.appService.taxOnCart();
@@ -75,9 +78,18 @@ export class HomePage{
     return this.appService.cartPriceTotal();
   }
 
-   addToCart(item,item_name,price,quant,size, type, sub_item){
+  addToCart(itemObj) {
+    let item = itemObj.item,
+      item_name = itemObj.item_name,
+      price = itemObj.price,
+      discount = 0,
+      discount_per = 0,
+      quant = 1,
+      size = itemObj.size,
+      type = itemObj.type,
+      sub_item = itemObj.sub_item;
 
-     this.appService.addToCart(item, item_name, price, quant, size, type, sub_item);
+     this.appService.addToCart(item, item_name, price, discount,discount_per, quant, size, type, sub_item);
    }
 
    removeFromCart(item, size){
@@ -88,8 +100,12 @@ export class HomePage{
     return this.appService.cartQuantityForItem(item);
   }
 
-  openSetQuantModal(item, item_name, price, type) {
-    let modal = this.modalCtrl.create(SetQuantPage, { item: item, item_name: item_name, price: price, thali: false, type:type, itemObj:""}, { showBackdrop: true, enableBackdropDismiss: true });
+  showDateStr() {
+    return this.appService.showDateStr();
+  }
+
+  openSetQuantModal(item, item_name, price, type, ps_type, ps_type_val) {
+    let modal = this.modalCtrl.create(SetQuantPage, { item: item, item_name: item_name, price: price, thali: false, type:type, ps_type: ps_type, ps_type_val: ps_type_val, itemObj:""}, { showBackdrop: true, enableBackdropDismiss: true });
     modal.present();
   }
 
@@ -99,42 +115,6 @@ export class HomePage{
     modal.present();
   }
 
- 
-    selectQuantity(item,item_name,price,quant,size, type, sub_item) {
-        let alert = this.alertCtrl.create({
-            title: 'Quantity',
-            inputs : [
-                {
-                    type:'radio',
-                    label:'Small '+ "₹" +price,
-                    value: "small",
-                    checked: size == "small"
-                },
-                {
-                    type:'radio',
-                    label:'Medium '+ "₹" +Math.round(price * 1.2 ),
-                    value:'medium',
-                    checked: size == "medium"
-                },
-                {
-                    type:'radio',
-                    label:'Large '+ "₹" +Math.round(price * 1.4),
-                    value:'large',
-                    checked: size == "large"
-                }
-            ],
-            buttons: [
-                {
-                text: 'Add',
 
-                    handler: data => {
-                        this.addToCart(item,item_name,price,quant,data, type, sub_item);
-                        console.log('Cancel clicked '+data + " "+item + " "+price + " "+quant);
-                    }
-
-                }]
-        });
-        alert.present();
-    }
 
 }

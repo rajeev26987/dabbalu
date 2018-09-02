@@ -17,7 +17,7 @@
             <div [hidden]="citem.size==''">({{citem.size }})</div>
           </ion-col>
           <ion-col>
-            <button ion-button outline small class="add-remove-cart-button"><p class="remove-from-cart" (click)="removeFromCart(citem.item,citem.item_name,citem.size)">-</p> <p class="cart-quant">{{citem.quant}}</p> <p class="add-to-cart" (click)="addToCart(citem.item,citem.price,1,citem.size,citem.type,citem.sub_type,'i')">+</p></button>
+            <button ion-button outline small class="add-remove-cart-button"><p class="remove-from-cart" (click)="removeFromCart(citem.item,citem.item_name,citem.size)">-</p> <p class="cart-quant">{{citem.quant}}</p> <p class="add-to-cart" (click)="addToCart(citem)">+</p></button>
           </ion-col>
           <ion-col align-self-center class="cart-price">
             &#x20b9;{{citem.price * citem.quant }}

@@ -7,13 +7,36 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Select thali ({{size}})</ion-title>
+    <ion-title><ion-icon (click)="  dismiss()" name="arrow-back"></ion-icon> Select thali ({{size}})</ion-title>
+
+    <ion-buttons end>  <button [disabled]="!thaliCondition()" class="confirm-thali" ion-button outline color="secondary" small (click)="  confirmThali()">Done</button></ion-buttons>
+
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
+
+  <ion-card>
+    <ion-card-content>
+      Create your own customized {{size}} thali.
+      <ul>
+        <li>
+          Select at least one item from Roti/Rice.
+        </li>
+        <li>
+          Select any {{curry_no}} {{  (curry_no>1)? " curries" : " curry" }} of your choice.
+        </li>
+        <li>
+          You can also select upto 2 addons.
+        </li>
+      </ul>
+
+
+
+    </ion-card-content>
+  </ion-card>
 
   <ion-card (click)="openSelThaliMenuModal(size,'r')">
     <img src="../../assets/imgs/roti_rice.png" />
@@ -79,8 +102,8 @@
             <button [hidden]="cartQuantityForThaliItem(item.item) <= 0" (click)="openSetQuantModal(item.item, item.price, item.type)" class="add-remove-cart-button" ion-button outline small><p class="remove-from-cart">-</p> <p class="cart-quant">{{cartQuantityForThaliItem(item.item)}}</p>   <p [class.disable-add]="maxItemReached('a')" class="add-to-cart">+</p></button>
           </div>
           <div [hidden]="item.type !='a'" class="col col-50">
-            <button [disabled]="maxItemReached('a')" [hidden]="cartQuantityForThaliItem(item.item) > 0" ion-button outline small (click)="addToThali(item.item, item.item_name, item.price,1,'', item.type)" class="add-cart-button">Add</button>
-            <button [hidden]="cartQuantityForThaliItem(item.item) <= 0" class="add-remove-cart-button" ion-button outline small><p (click)="removeFromThali(item.item,'')" class="remove-from-cart">-</p> <p class="cart-quant">{{cartQuantityForThaliItem(item.item)}}</p>   <p [class.disable-add]="maxItemReached('a')" (click)="addToThali(item.item, item.item_name, item.price,1,'', item.type)" class="add-to-cart">+</p></button>
+            <button [disabled]="maxItemReached('a')" [hidden]="cartQuantityForThaliItem(item.item) > 0" ion-button outline small (click)="addToThali(item)" class="add-cart-button">Add</button>
+            <button [hidden]="cartQuantityForThaliItem(item.item) <= 0" class="add-remove-cart-button" ion-button outline small><p (click)="removeFromThali(item.item,'')" class="remove-from-cart">-</p> <p class="cart-quant">{{cartQuantityForThaliItem(item.item)}}</p>   <p [class.disable-add]="maxItemReached('a')" (click)="addToThali(item)" class="add-to-cart">+</p></button>
           </div>
         </div>
 
@@ -89,7 +112,26 @@
     </ion-scroll>
 
   </div>
+  <div [hidden]="thaliLength()<1" class="cart-item">
+    <b>Items</b>
+    <ion-grid>
+      <ion-row *ngFor="let citem of getThali()">
+        <ion-col col-6 class="cart-description">
+          <div>{{citem.item_name }}</div>
+          <div [hidden]="citem.size ==''">({{citem.size }})</div>
+        </ion-col>
+        <ion-col align-self-center>
+          <button ion-button outline small class="add-remove-cart-button"><p class="remove-from-cart" (click)="removeFromThali(citem.item,citem.size)">-</p> <p class="cart-quant">{{citem.quant}}</p> <p class="add-to-cart" [class.disable-add]="maxItemReached(citem.type)" (click)="addToThali(citem)">+</p></button>
+        </ion-col>
+        <ion-col align-self-center class="cart-price">
+          &#x20b9;{{citem.price * citem.quant }}
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+
   <div *ngIf="thaliCondition()" class="cart-bill-style">
+
     <div class="cart-bill-card">
       <b>Summary</b>
       <ion-grid>
@@ -128,18 +170,6 @@
 
 
 
-  <div class="thali-buttons">
 
-    <div class="row">
-      <div claass="col col-50">
-        <button class="dismiss-thali" ion-button outline small (click)="  dismiss()">Dismiss</button>
-      </div>
-      <div claass="col col-50">
-        <button [disabled]="!thaliCondition()" class="confirm-thali" ion-button outline color="secondary" small (click)="  confirmThali()">Confirm</button>
-      </div>
-    </div>
-
-
-  </div>
 
 </ion-content>

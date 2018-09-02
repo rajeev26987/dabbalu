@@ -28,6 +28,7 @@ export class SetThaliQuantPage {
   curr_sel_date: Date;
   menu_type: string;
   item_no: number;
+  ps_type_val: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public renderer: Renderer, public viewCtrl: ViewController, public appService: AppProvider, public thaliProvider: ThaliProvider) {
     this.renderer.setElementClass(viewCtrl.pageRef().nativeElement, 'custom-popup', true);
@@ -39,9 +40,10 @@ export class SetThaliQuantPage {
     this.itemObj = navParams.get('itemObj');
     this.menu_type = navParams.get('menu_type');
     this.item_no = navParams.get('item_no');
+    this.ps_type_val = navParams.get('ps_type_val');
 
 
-    if (this.myType == "r") {
+  /*  if (this.myType == "r") {
       this.itemSize = ['half', 'full'];
       this.itemPrice = [this.myPrice, Math.round(this.myPrice * 1.5)]
     }
@@ -52,18 +54,18 @@ export class SetThaliQuantPage {
     else {
       this.itemSize = ['small', 'medium', 'large'];
       this.itemPrice = [this.myPrice, Math.round(this.myPrice * 1.2), Math.round(this.myPrice * 1.4)]
-    }
+    }*/
 
 
     this.itemList = [];
     this.curr_sel_date = this.get_curr_sel_date();
-    for (let i = 0; i < this.itemSize.length; i++) {
+    for (let i = 0; i < this.ps_type_val.length; i++) {
       this.itemList.push({
         item: this.myItem,
         item_name: this.myItemName,
-        size:  this.itemSize[i],
-        price: this.itemPrice[i],
-        quant: this.getItemQuantInThali(this.myItem, this.itemSize[i]),
+        size: this.ps_type_val[i].sc_size,
+        price: this.ps_type_val[i].ps_price,
+        quant: this.getItemQuantInThali(this.myItem, this.ps_type_val[i].sc_size),
         date: this.curr_sel_date,
         type: this.myType
       });
@@ -101,28 +103,22 @@ export class SetThaliQuantPage {
     return this.appService.getItemQuantInCart(item, size);
   }
 
-  addToCart(item, item_name, price, quant, size, type, sub_item) {
-    this.appService.addToCart(item, item_name, price, quant, size, type, sub_item);
-    let index = this.checkItemInItemList(item, size);
-    if (index >= 0) {
-      this.itemList[index].quant = this.getItemQuantInCart(item, size);
-    }
-  }
-  removeFromCart(item, size) {
-    this.appService.removeFromCart(item, size);
-    let index = this.checkItemInItemList(item, size);
-    if (index >= 0) {
-      this.itemList[index].quant = this.getItemQuantInCart(item, size);
-    }
-
-  }
+ 
   getItemQuantInThali(item, size) {
     return this.thaliProvider.getItemQuantInThali(item, size);
   }
 
-  addToThali(item, item_name, price, quant, size, type, flag?) {
+  addToThali(itemObj) {
+ 
     if (!this.maxItemReached()) {
-      this.thaliProvider.addToThali(item, item_name, price, quant, size, type, flag);
+      let item = itemObj.item,
+        item_name = itemObj.item_name,
+        price = itemObj.price,
+        quant = 1,
+        size = itemObj.size,
+        type = itemObj.type;
+
+      this.thaliProvider.addToThali(item, item_name, price, quant, size, type);
 
       let index = this.checkItemInItemList(item, size);
       if (index >= 0) {

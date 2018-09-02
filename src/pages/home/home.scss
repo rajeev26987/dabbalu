@@ -118,8 +118,10 @@ page-home {
   }
 
   .select-date-block {
+ 
     height: 70px;
     margin-top: 5px;
+    z-index: 10;
   }
 
   .date-day-block {
@@ -146,8 +148,22 @@ page-home {
     border-bottom-color: lawngreen;
   }
 
-  .sub-item{
+  .sub-item {
     font-size: 80%;
-    color:#d0caca
+    color: #d0caca
+  }
+
+  .my-date-style {
+    color: orangered;
+    font-size: 150%;
+    padding-bottom: 10px;
+  }
+
+  .cart-item {
+    padding-bottom: 10px;
+  }
+
+  .cart-bill-card{
+    padding-bottom: 10px;
   }
 }

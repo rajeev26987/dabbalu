@@ -20,8 +20,8 @@
         {{item.size}}
       </ion-col>
       <ion-col>
-        <button [disabled]="maxItemReached()" class="add-cart-button" [hidden]="item.quant > 0" ion-button outline small (click)="addToThali(item.item, item.item_name, item.price, 1, item.size, item.type)">Add</button>
-        <button class="add-remove-cart-button" [hidden]="item.quant <= 0" ion-button outline icon-end small><p class="remove-from-cart" (click)="removeFromThali(item.item,item.size)">-</p> <p class="cart-quant">{{item.quant}}</p>   <p  class="add-to-cart" [class.disable-add]="maxItemReached()" (click)="addToThali(item.item, item.item_name,item.price,1,item.size)">+</p></button>
+        <button [disabled]="maxItemReached()" class="add-cart-button" [hidden]="item.quant > 0" ion-button outline small (click)="addToThali(item)">Add</button>
+        <button class="add-remove-cart-button" [hidden]="item.quant <= 0" ion-button outline icon-end small><p class="remove-from-cart" (click)="removeFromThali(item.item,item.size)">-</p> <p class="cart-quant">{{item.quant}}</p>   <p  class="add-to-cart" [class.disable-add]="maxItemReached()" (click)="addToThali(item)">+</p></button>
       </ion-col>
       <ion-col class="cart-price" align-self-center>
         {{"₹" + item.price}}

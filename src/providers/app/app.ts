@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { stagger } from '@angular/core/src/animation/dsl';
+import { LoadingController } from 'ionic-angular';
 
 
 
@@ -17,34 +18,46 @@ export class AppProvider {
     price: number[];
     item_type: string[];
     all_item: string[];
-    cart_items: Array<{ item: number, item_name: string, price: number, size: string, quant: number, date: Date, type: string, sub_item: Array<{ item: number, item_name: string, price: number, size: string, quant: number, type: string}>}>;
+    cart_items: Array<{ item: number, item_name: string, price: number, discount:number, discount_per: number, size: string, quant: number, date: Date, type: string, sub_item: Array<{ item: number, item_name: string, price: number, size: string, quant: number, type: string}>}>;
 
   menu_items: any;
   menu_init: number;
   tax_per: number;
   deliver_ch: number;
   dates: Date[];
-  myDates: Array<{ day: string, date: number, date_obj:Date, flag: boolean, sel: boolean }>;
+  myDates: Array<{ day: string, date: number, date_num: number, date_obj:Date, flag: boolean, sel: boolean }>;
   weekDay: string[];
   cur_sel_date: Date;
-  default_sub_item: { item: string, price: number, size: string, quant: number };
+  monthNames: string[];
+  loader: any;
+ // default_sub_item: { item: string, price: number, size: string, quant: number };
 
 
-  constructor(private http: HttpClient) {
-
- 
+  constructor(private http: HttpClient, public loadingCtrl: LoadingController) {
+   
     this.menu_init = 0;
+    let savedCart = localStorage.getItem("cart");
 
-    this.cart_items = [];
+    if (savedCart != "") {
+      this.cart_items = JSON.parse(savedCart);
+    }
+    else {
+      this.cart_items = [];
+    }
+
     this.tax_per = 0.12;
     this.deliver_ch = 0;
-    this.default_sub_item = {item: 'e', price: 0, size: 'e', quant: 0};
+ //   this.default_sub_item = {item: 'e', price: 0, size: 'e', quant: 0};
 
     let start = new Date();
     let end = new Date(start.getFullYear(), start.getMonth() + 1, 0);
     end = (start.getDate() > 24) ? new Date(start.getFullYear(), start.getMonth() + 2, 0) : end;
     this.myDates = [];
     this.weekDay = ["SUN", "MON", "TUES", "WED", "THU", "FRI", "SAT"];
+    this.monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "June",
+      "July", "Aug", "Sep", "Oct", "Nov", "Dec"
+    ];
+
     let flag = (start.getDay() == 0 || start.getDay() == 6) ? false : true;
     let sel = flag;
     let sel_flag = sel;
@@ -54,6 +67,7 @@ export class AppProvider {
     this.myDates.push({
       day: "TODAY",
       date: start.getDate(),
+      date_num: this.formatDate(start),
       date_obj: start,
       flag: flag,
       sel: sel
@@ -67,6 +81,7 @@ export class AppProvider {
     this.myDates.push({
       day: "TOMORROW",
       date: next_date.getDate(),
+      date_num: this.formatDate(next_date),
       date_obj: next_date,
       flag: flag,
       sel: sel
@@ -84,6 +99,7 @@ export class AppProvider {
       this.myDates.push({
         day: this.weekDay[my_next_date.getDay()],
         date: my_next_date.getDate(),
+        date_num: this.formatDate(my_next_date),
         date_obj: my_next_date,
         flag: flag,
         sel: sel
@@ -100,13 +116,20 @@ export class AppProvider {
 
   iniMenuItem() {
     if (this.menu_init != 1) {
+      this.loader = this.loadingCtrl.create({
+        content: "Please wait...",
+
+      });
+      this.loader.present();
       this.menu_init = 3;
-      this.http.get("http://dabbalu.com/my_menu.php").subscribe(r => {
+      this.http.get("http://dabbalu.com/food_menu.php").subscribe(r => {
+        this.loader.dismiss();
         this.menu_items = r;
         this.menu_init = 1;
         console.log("success menu init " + this.menu_init);
       },
         error => {
+          this.loader.dismiss();
           this.menu_init = 2;
           console.log("some error menu init " + this.menu_init);
         }
@@ -193,21 +216,6 @@ export class AppProvider {
   }
 
 
- /* setQuantItems(item,price) {
-    let itemSize =["small","medium","large"];
-    let itemPrice= [price, Math.round(price*1.2),Math.round(price*1.4)];
-    let itemList: Array<{ item: string, size: string, price: number, quant: number,  }>;
-    itemList = [];
-    for (let i = 0; i < itemSize.length; i++) {
-      itemList.push({
-        item: item,
-        size: itemSize[i],
-        price: itemPrice[i],
-        quant: this.getItemQuantInCart(item, itemPrice[i])
-      });
-    }
-  }*/
-
   cartQuantity() {
     let q: number;
     q = 0;
@@ -267,8 +275,16 @@ export class AppProvider {
     }
   }
 
+  compareObj(a, b) {
+    if (a.item < b.item)
+      return -1;
+    if (a.item > b.item)
+      return 1;
+    return 0;
+  }
+
   sameObj(arr1, arr2) {
-    if (JSON.stringify(arr1.sort()) === JSON.stringify(arr2.sort())) {
+    if (JSON.stringify(arr1.sort(this.compareObj)) === JSON.stringify(arr2.sort(this.compareObj))) {
       return true;
     }
     else {
@@ -276,7 +292,7 @@ export class AppProvider {
     }
   }
 
-  confirmThali(item, item_name, price, quant, size,type,subObj) {
+  confirmThali(item, item_name, price, discount, discount_per, quant, size,type,subObj) {
     let pThis = this;
     subObj.sort();
     let myIndex = this.cart_items.findIndex(function (obj) {
@@ -293,6 +309,8 @@ export class AppProvider {
         item: item,
         item_name: item_name,
         price: price,
+        discount: discount,
+        discount_per: discount_per,
         size: size,
         quant: quant,
         date: this.cur_sel_date,
@@ -307,43 +325,47 @@ export class AppProvider {
   cartPrice() {
     let p: number;
     p = 0;
-    for (let x of this.cart_items) {
-      p += x.price * x.quant;
+    for (let x of this.getCartWithDate()) {
+      p += (x.price + x.discount) * x.quant;
+    }
+    return Math.round(p);
+  }
+  cartPriceAfterDiscount() {
+    let p: number;
+    p = 0;
+    for (let x of this.getCartWithDate()) {
+      p += x.price  * x.quant;
+    }
+    return Math.round(p);
+  }
+  discountOnCart() {
+    let p: number;
+    p = 0;
+    for (let x of this.getCartWithDate()) {
+      p += x.discount * x.quant;
     }
     return Math.round(p);
   }
 
   taxOnCart() {
-    return Math.round(this.cartPrice() * this.tax_per);
+    return Math.round(this.cartPriceAfterDiscount() * this.tax_per);
   }
   delieveryChargeOnCart() {
     return Math.round(this.deliver_ch);
   }
 
   cartPriceTotal() {
-    return (this.cartPrice() + this.taxOnCart() + this.delieveryChargeOnCart()) ;
+    return (this.cartPriceAfterDiscount() + this.taxOnCart() + this.delieveryChargeOnCart()) ;
   }
    
    
-  addToCart(item, item_name, price, quant, size, type, sub_item, flag?) {
+  addToCart(item, item_name, price, discount, discount_per, quant, size, type, sub_item) {
     if (!Array.isArray(sub_item)) {
       sub_item = [];
     }
 
      console.log("print " + item + " " + price + " " + quant + " " + size + " " + this.cur_sel_date);
-     if (flag == "i") { }
-     else {
-       if (size == "medium") {
-         price = price * 1.2;
-       }
-       else if (size == 'large') {
-         price = price * 1.4;
-       }
-       else if (size == 'pack of 5' || size == 'full') {
-         price = price * 1.5;
-       }
-       price = Math.round(price);
-     }
+
      let pThis = this;
     let myIndex =   this.cart_items.findIndex(function(obj) {
       return (obj.item === item && obj.size === size && obj.date == pThis.cur_sel_date && pThis.sameObj(obj.sub_item, sub_item));
@@ -359,6 +381,8 @@ export class AppProvider {
             item: item,
             item_name: item_name,
             price: price,
+            discount: discount,
+            discount_per: discount_per,
             size: size,
             quant: quant,
             date: this.cur_sel_date,
@@ -413,6 +437,25 @@ export class AppProvider {
       
       }
     }
+  }
+
+ formatDate(date) {
+  var d = date,
+    month = '' + (d.getMonth() + 1),
+    day = '' + d.getDate(),
+    year = d.getFullYear();
+
+  if (month.length < 2) month = '0' + month;
+   if (day.length < 2) day = '0' + day;
+   var r = Number(year + month + day);
+  return r;
+ }
+
+  showDateStr() {
+    var d = this.cur_sel_date,
+      r = d.getDate() + " " + this.monthNames[d.getMonth()];
+    return r;
+    
   }
     
 
