@@ -13,7 +13,7 @@ import { stagger } from '@angular/core/src/animation/dsl';
 @Injectable()
 export class ThaliProvider {
  
-  thali_item: Array<{ item: number, item_name: string, price: number, size: string, quant: number, type: string, p_veg: boolean, ps_type: string, ps_size_id: number, ps_quant: number, ps_unit: string }>;
+  thali_item: Array<{ item: number, item_name: string, price: number, discount: number, discount_per: number, size: string, quant: number, type: string, p_veg: boolean, ps_type: string, ps_size_id: number, ps_quant: number, ps_unit: string }>;
   discount_per: number;
   veg_ind: boolean;
 
@@ -24,9 +24,8 @@ export class ThaliProvider {
   }
 
   vegInd() {
-
-    let myIndex = this.thali_item.findIndex(function (obj) {
-      return (obj.p_veg === false);
+     let myIndex = this.thali_item.findIndex(function (obj) {
+      return (obj.p_veg == false);
     });
     if (myIndex >=0) {
       return false;
@@ -41,6 +40,7 @@ export class ThaliProvider {
   }
 
   getThali() {
+    
     return this.thali_item;
   }
 
@@ -80,7 +80,7 @@ export class ThaliProvider {
    
   }
 
-  addToThali(item, item_name, price, quant, size, type, p_veg, ps_type, ps_size_id, ps_quant, ps_unit) {
+  addToThali(item, item_name, price, discount, discount_per, quant, size, type, p_veg, ps_type, ps_size_id, ps_quant, ps_unit) {
 
     let pThis = this;
     let myIndex = this.thali_item.findIndex(function (obj) {
@@ -97,6 +97,8 @@ export class ThaliProvider {
         item: item,
         item_name: item_name,
         price: price,
+        discount: discount,
+        discount_per: discount_per,
         size: size,
         quant: quant,
         type: type,

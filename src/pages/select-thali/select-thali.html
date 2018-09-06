@@ -124,9 +124,10 @@
           <div>
             <ion-icon [class.item-non-veg]="citem.p_veg==0" [class.item-veg]="citem.p_veg==1" ios="ios-radio-button-on" md="md-radio-button-on"></ion-icon>
 
-            {{citem.item_name }}
+            {{citem.item_name }} x{{citem.quant}}
           </div>
           <div [hidden]="citem.size ==''">({{citem.size }})</div>
+          
         </ion-col>
         <ion-col align-self-center>
           <button ion-button outline small class="add-remove-cart-button"><p class="remove-from-cart" (click)="removeFromThali(citem.item,citem.size)">-</p> <p class="cart-quant">{{citem.quant}}</p> <p class="add-to-cart" [class.disable-add]="maxItemReached(citem.type)" (click)="addToThali(citem)">+</p></button>

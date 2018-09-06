@@ -4,6 +4,7 @@ import { AppProvider } from '../../providers/app/app';
 import { Services } from '@angular/core/src/view';
 import { SetQuantPage } from '../set-quant/set-quant';
 import { SelectThaliPage } from '../select-thali/select-thali';
+import { EditSchedulePage } from '../edit-schedule/edit-schedule';
 
 @Component({
   selector: 'page-home',
@@ -82,8 +83,8 @@ export class HomePage{
     let item = itemObj.item,
       item_name = itemObj.item_name,
       price = itemObj.price,
-      discount = 0,
-      discount_per = 0,
+      discount = itemObj.discount,
+      discount_per = itemObj.discount_per,
       quant = 1,
       size = itemObj.size,
       type = itemObj.type,
@@ -107,8 +108,47 @@ export class HomePage{
     return this.appService.cartQuantityForItem(item);
   }
 
+  getScheduleItemsForDate(date?) {
+    return this.appService.getScheduleItemsForDate(date);
+  }
+  getScheduleItemsLenForDate(date?) {
+    return this.appService.getScheduleItemsLenForDate(date);
+  }
+  groupScheduledItemsForDate(date?) {
+    return this.appService.groupScheduledItemsForDate(date);
+  }
+
+  scheduledItemPrice() {
+    return this.appService.scheduledItemPrice();
+  }
+  scheduledItemPriceAfterDiscount() {
+    return this.appService.scheduledItemPriceAfterDiscount();
+  }
+  discountOnScheduledItem() {
+    return this.appService.discountOnScheduledItem();
+  }
+
+  taxOnScheduledItem() {
+    return this.appService.taxOnScheduledItem();
+  }
+  delieveryChargeOnScheduledItem() {
+    return this.appService.delieveryChargeOnScheduledItem();
+  }
+
+  scheduledItemPriceTotal() {
+    return this.appService.scheduledItemPriceTotal();
+  }
+
+
+  getPriceBeforeDiscount(price, discount, quant) {
+    return (Number(price) + Number(discount)) * Number(quant);
+  }
+
   showDateStr() {
     return this.appService.showDateStr();
+  }
+  createSchedule(date?) {
+    return this.appService.createSchedule(date);
   }
 
   openSetQuantModal(itemAll) {
@@ -126,6 +166,16 @@ export class HomePage{
   openSetThaliModal(size, for_date) {
     console.log("opening thali model");
     let modal = this.modalCtrl.create(SelectThaliPage, { size: size, for_date: for_date }, { showBackdrop: true, enableBackdropDismiss: true });
+    modal.present();
+  }
+
+
+  openEditScheduleModal() {
+    let schObj = this.getScheduleItemsForDate();
+    let for_date = this.get_curr_sel_date();
+
+    console.log("Edit schedule model");
+    let modal = this.modalCtrl.create(EditSchedulePage, { schObj: schObj, for_date: for_date }, { showBackdrop: true, enableBackdropDismiss: true });
     modal.present();
   }
 

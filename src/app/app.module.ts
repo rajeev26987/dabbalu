@@ -20,6 +20,7 @@ import { SelThaliMenuPage } from '../pages/sel-thali-menu/sel-thali-menu';
 import { ThaliProvider } from '../providers/app/thali';
 import { SetThaliQuantPage } from '../pages/set-thali-quant/set-thali-quant';
 import { MyhomePage } from '../pages/myhome/myhome';
+import { EditSchedulePage } from '../pages/edit-schedule/edit-schedule';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { MyhomePage } from '../pages/myhome/myhome';
     SetQuantPage,
     SetThaliQuantPage,
     SelectThaliPage,
-    SelThaliMenuPage
+    SelThaliMenuPage,
+    EditSchedulePage
   ],
   imports: [
     HttpClientModule,
@@ -52,7 +54,8 @@ import { MyhomePage } from '../pages/myhome/myhome';
     SetQuantPage,
     SetThaliQuantPage,
     SelectThaliPage,
-    SelThaliMenuPage
+    SelThaliMenuPage,
+    EditSchedulePage
   ],
   providers: [
     StatusBar,

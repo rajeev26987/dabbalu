@@ -1,0 +1,101 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      <ion-icon (click)="  dismiss()" name="arrow-back"></ion-icon>  Edit schedule
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <div class="my-date-style">{{showDateStr()}}</div>
+  <div><b>Scheduled Items</b></div>
+  <div *ngIf="getScheduleItemsLenForDate() > 0" class="cart-item-style">
+
+    <div class="cart-item-card">
+
+      <div class="cart-item">
+        <ion-grid>
+          <ion-row *ngFor="let citem of getScheduleItemsForDate()">
+            <ion-col>
+              <ion-row *ngFor="let x of repeatNtimes(citem.quant)">
+
+                <ion-col col-9 class="cart-description">
+                  <div>
+                    <ion-icon [class.item-non-veg]="citem.p_veg==0" [class.item-veg]="citem.p_veg==1" ios="ios-radio-button-on" md="md-radio-button-on"></ion-icon> {{
+citem.item_name
+                    }} <span [hidden]="citem.size ==''">({{citem.size }})</span>
+                  </div>
+
+                  <div [hidden]="citem.sub_item.length == 0">
+                    <div class="sub-item" *ngFor="let sitem of citem.sub_item">
+                      {{sitem.item_name}} <span [hidden]="sitem.size ==''"> ({{sitem.size }})</span> x{{sitem.quant}}
+                    </div>
+                  </div>
+                </ion-col>
+                <ion-col align-self-center class="cart-price">
+                  &#x20b9;{{getPriceBeforeDiscount(citem.price, citem.discount, 1) }}
+                </ion-col>
+                <ion-col align-self-center class="cart-price">
+                  <ion-icon name="trash" style="color:red" (click)="scheduleForDelete(citem.sq_id)"></ion-icon>
+                </ion-col>
+              </ion-row>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </div>
+      <div class="cart-bill-card">
+        <b>Bill Summary</b>
+        <ion-grid>
+          <ion-row>
+            <ion-col class="cart-description">
+              Item total
+            </ion-col>
+            <ion-col class="cart-price">
+              &#x20b9;{{scheduledItemPrice()}}
+            </ion-col>
+
+          </ion-row>
+          <ion-row [hidden]="discountOnScheduledItem()<=0">
+            <ion-col class="cart-description">
+              Discount
+            </ion-col>
+            <ion-col class="cart-price">
+              &#x20b9;{{discountOnScheduledItem()}}
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col class="cart-description">
+              Tax
+            </ion-col>
+            <ion-col class="cart-price">
+              &#x20b9;{{taxOnScheduledItem()}}
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col class="cart-description">
+              Delivery Charges
+            </ion-col>
+            <ion-col class="cart-price">
+              &#x20b9;{{delieveryChargeOnScheduledItem()}}
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col class="cart-description">
+              <b>To Pay</b>
+            </ion-col>
+            <ion-col class="cart-price">
+              <b>&#x20b9;{{scheduledItemPriceTotal()}}</b>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </div>
+
+    </div>
+  </div>
+  <div class="no-items" *ngIf="getScheduleItemsLenForDate() <= 0">
+    No more items
+  </div>
+  <div>
+    <ion-buttons end>  <button [disabled]="!getSecheduleForDeletionLen()" ion-button outline color="secondary" small (click)="updateSchedule()">Update</button></ion-buttons>
+  </div>
+</ion-content>

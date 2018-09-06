@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { stagger } from '@angular/core/src/animation/dsl';
 import { LoadingController } from 'ionic-angular';
@@ -18,10 +18,12 @@ export class AppProvider {
     price: number[];
     item_type: string[];
     all_item: string[];
-  cart_items: Array<{ item: number, item_name: string, price: number, discount: number, discount_per: number, size: string, quant: number, date: number, type: string, p_veg: boolean, ps_type: string, ps_size_id: number,ps_quant: number, ps_unit:string, sub_item: Array<{ item: number, item_name: string, price: number, size: string, quant: number, type: string, p_veg: boolean, ps_type: string, ps_size_id: number,ps_quant: number, ps_unit:string}>}>;
+    cart_items: Array<{ item: number, item_name: string, price: number, discount: number, discount_per: number, size: string, quant: number, date: number, type: string, p_veg: boolean, ps_type: string, ps_size_id: number,ps_quant: number, ps_unit:string, sub_item: Array<{ item: number, item_name: string, price: number, discount: number, discount_per, number, size: string, quant: number, type: string, p_veg: boolean, ps_type: string, ps_size_id: number,ps_quant: number, ps_unit:string}>}>;
 
   menu_items: any;
   menu_init: number;
+  schedule_items: any;
+  schedule_init: number;
   tax_per: number;
   deliver_ch: number;
   dates: Date[];
@@ -34,7 +36,8 @@ export class AppProvider {
 
 
   constructor(private http: HttpClient, public loadingCtrl: LoadingController) {
-   
+    this.schedule_init = 0;
+    this.getScheduledItems();
     this.menu_init = 0;
     localStorage.setItem("cart", "");
     this.cart_items = [];
@@ -133,6 +136,189 @@ export class AppProvider {
       );
     }
   }
+
+  getScheduledItems(date?) {
+    if (this.schedule_init != 1 && this.schedule_init != 3) {
+      this.schedule_init = 3;
+      this.http.get("http://dabbalu.com/get_schedule_item.php").subscribe(r => {     
+        this.schedule_items = r;
+        this.schedule_init = 1;
+        console.log("success schedule init " + JSON.stringify(r));
+      },
+        error => {
+          this.schedule_init = 2;
+          console.log("some error menu init " );
+        }
+      );
+    }
+  }
+
+
+  createSchedule(date?) {
+    this.loader = this.loadingCtrl.create({
+      content: "Scheduling...",
+
+    });
+    this.loader.present();
+    let cart = JSON.stringify(this.getCartWithDate(date));
+   
+
+    this.http.post("http://dabbalu.com/schedule_item.php", cart).subscribe(r => {
+      
+      console.log("success created schedule " + JSON.stringify(r));
+      this.schedule_items = r;
+      this.schedule_init = 1;
+      this.removeFromCartForDate(date);
+      this.loader.dismiss();
+    },
+      error => {
+        this.loader.dismiss();
+        console.log("some error in create schedule ");
+      }
+    );
+  }
+
+  updateSchedule(schDel) {
+    this.loader = this.loadingCtrl.create({
+      content: "Updating schedule...",
+
+    });
+    this.loader.present();
+    let data = JSON.stringify(schDel);
+   
+    this.http.post("http://dabbalu.com/sechedule_delete.php", data).subscribe(r => {
+      this.schedule_items = r;
+      this.schedule_init = 1;
+      this.loader.dismiss();
+      console.log("new schedule " + JSON.stringify(r));
+
+    },
+      error => {
+        this.loader.dismiss();
+        console.log("some error in create schedule ");
+      }
+    );
+
+  }
+
+  groupScheduledItemsForDate(date) {
+
+    let itemObj = this.getScheduleItemsForDate(date);
+    let pThis = this;
+    if (itemObj != 0) {
+   //   console.log("sssssc item" + JSON.stringify(itemObj));
+      let len = itemObj.length;
+      let schItem: Array<{ item: number, item_name: string, price: number, discount: number, discount_per: number, size: string, quant: number, date: number, type: string, p_veg: boolean, ps_type: string, ps_size_id: number, ps_quant: number, ps_unit: string, sub_item: Array<{ item: number, item_name: string, price: number, discount: number, discount_per, number, size: string, quant: number, type: string, p_veg: boolean, ps_type: string, ps_size_id: number, ps_quant: number, ps_unit: string }> }>;
+      schItem = [];
+      for (let i = 0; i < len; i++) {
+        let subO = [];
+        let myIndex;
+        if (itemObj[i].item == 100) {
+          subO = itemObj[i].sub_item;
+          myIndex = schItem.findIndex(function (obj) {
+            return (obj.item === itemObj[i].item && obj.size === itemObj[i].size && obj.date == itemObj[i].date && pThis.sameObj(obj.sub_item, subO));
+          });
+        }
+        else {
+          subO = [];
+          myIndex = schItem.findIndex(function (obj) {
+            return (obj.item === itemObj[i].item && obj.size === itemObj[i].size && obj.date == itemObj[i].date );
+          });
+        }
+        
+        if (myIndex >= 0) {
+          console.log("element already there");
+          schItem[myIndex].quant += Number(itemObj[i].quant);
+          schItem[myIndex].price += Number(itemObj[i].price) * Number(itemObj[i].quant);
+          schItem[myIndex].discount += Number(itemObj[i].discount);
+        }
+        else {
+
+          schItem.push({
+            item: itemObj[i].item,
+            item_name: itemObj[i].item_name,
+            price: Number(itemObj[i].price) * Number(itemObj[i].quant),
+            discount: Number(itemObj[i].discount),
+            discount_per: Number(itemObj[i].discount_per),
+            size: itemObj[i].size,
+            quant: Number(itemObj[i].quant),
+            date: itemObj[i].date,
+            type: itemObj[i].type,
+            p_veg: itemObj[i].p_veg,
+            ps_type: itemObj[i].ps_type,
+            ps_size_id: itemObj[i].ps_size_id,
+            ps_quant: itemObj[i].ps_quant,
+            ps_unit: itemObj[i].ps_unit,
+            sub_item: subO
+          });
+        }
+      }
+      return schItem;
+    }
+    else {
+      return 0;
+    }
+
+  }
+
+
+
+
+  getScheduleItemsForDate(date?) {
+    if (!date) {
+      date = this.cur_sel_date;
+    }
+    if (this.schedule_init == 1) {
+      return this.schedule_items.filter(item => item.date == date);
+    }
+    else {
+      this.getScheduledItems();
+      return 0;
+    }
+
+  }
+
+  scheduledItemPrice() {
+    let p: number;
+    p = 0;
+    for (let x of this.getScheduleItemsForDate()) {
+      p += (Number(x.price) + Number(x.discount)) * x.quant;
+    }
+    return Math.round(p);
+  }
+  scheduledItemPriceAfterDiscount() {
+    let p: number;
+    p = 0;
+    for (let x of this.getScheduleItemsForDate()) {
+      p += Number(x.price) * Number(x.quant);
+    }
+    return Math.round(p);
+  }
+  discountOnScheduledItem() {
+    let p: number;
+    p = 0;
+    for (let x of this.getScheduleItemsForDate()) {
+      p += Number(x.discount) * Number(x.quant);
+    }
+    return Math.round(p);
+  }
+
+  taxOnScheduledItem() {
+    return Math.round(this.scheduledItemPriceAfterDiscount() * this.tax_per);
+  }
+  delieveryChargeOnScheduledItem() {
+    return Math.round(this.deliver_ch);
+  }
+
+  scheduledItemPriceTotal() {
+    return (this.scheduledItemPriceAfterDiscount() + this.taxOnScheduledItem() + this.delieveryChargeOnScheduledItem());
+  }
+
+  getScheduleItemsLenForDate(date?) {
+    return this.getScheduleItemsForDate(date).length;
+  }
+
+
 
 
 
@@ -432,6 +618,16 @@ export class AppProvider {
     
       localStorage.setItem("cart", JSON.stringify(this.cart_items));
     }
+  }
+
+  removeFromCartForDate(date?) {
+    if (!date) {
+      date = this.cur_sel_date;
+    }
+    this.cart_items = this.cart_items.reduce((p, c) => (c.date !== date && p.push(c), p), []);
+
+      localStorage.setItem("cart", JSON.stringify(this.cart_items));
+    
   }
 
   getDates() {

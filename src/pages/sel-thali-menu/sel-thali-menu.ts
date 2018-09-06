@@ -113,6 +113,8 @@ export class SelThaliMenuPage {
     let item = itemObj.item,
       item_name = itemObj.item_name,
       price = itemObj.price,
+      discount = itemObj.discount,
+      discount_per = itemObj.discount_per,
       quant = 1,
       size = itemObj.size,
       type = itemObj.type,
@@ -122,7 +124,7 @@ export class SelThaliMenuPage {
       ps_quant = itemObj.ps_quant,
       ps_unit = itemObj.ps_unit;
     if (!this.maxItemReached()) {
-      this.thaliProvider.addToThali(item, item_name, price, quant, size, type, p_veg, ps_type, ps_size_id, ps_quant, ps_unit);
+      this.thaliProvider.addToThali(item, item_name, price, discount, discount_per, quant, size, type, p_veg, ps_type, ps_size_id, ps_quant, ps_unit);
     }
  
   }

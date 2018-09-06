@@ -24,13 +24,14 @@ export class SetThaliQuantPage {
   itemObj: any;
   itemSize: string[];
   itemPrice: number[];
-  itemList: Array<{ item: number, item_name: string, size: string, price: number, quant: number, date: number, type: string, p_veg: boolean, ps_type: string, ps_size_id: number, ps_quant: number, ps_unit: string }>;
+  itemList: Array<{ item: number, item_name: string, size: string, price: number, discount: number, discount_per: number, quant: number, date: number, type: string, p_veg: boolean, ps_type: string, ps_size_id: number, ps_quant: number, ps_unit: string }>;
   curr_sel_date: number;
   menu_type: string;
   item_no: number;
   ps_type: string;
   ps_type_val: any;
   p_veg: boolean;
+  itemAll: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public renderer: Renderer, public viewCtrl: ViewController, public appService: AppProvider, public thaliProvider: ThaliProvider) {
     this.renderer.setElementClass(viewCtrl.pageRef().nativeElement, 'custom-popup', true);
@@ -45,21 +46,9 @@ export class SetThaliQuantPage {
     this.ps_type_val = navParams.get('ps_type_val');
     this.p_veg = navParams.get('p_veg');
     this.ps_type = navParams.get('ps_type');
+    this.itemAll = navParams.get('itemAll');
 
-
-  /*  if (this.myType == "r") {
-      this.itemSize = ['half', 'full'];
-      this.itemPrice = [this.myPrice, Math.round(this.myPrice * 1.5)]
-    }
-    else if (this.myType == 'b') {
-      this.itemSize = ['Pack of 3', 'Pack of 5'];
-      this.itemPrice = [this.myPrice, Math.round(this.myPrice * 1.5)]
-    }
-    else {
-      this.itemSize = ['small', 'medium', 'large'];
-      this.itemPrice = [this.myPrice, Math.round(this.myPrice * 1.2), Math.round(this.myPrice * 1.4)]
-    }*/
-
+    this.ps_type_val.sort(this.compareObj);
 
     this.itemList = [];
     this.curr_sel_date = this.get_curr_sel_date();
@@ -69,6 +58,8 @@ export class SetThaliQuantPage {
         item_name: this.myItemName,
         size: this.ps_type_val[i].sc_size,
         price: this.ps_type_val[i].ps_price,
+        discount: this.ps_type_val[i].discount,
+        discount_per: this.ps_type_val[i].discount_per,
         quant: this.getItemQuantInThali(this.myItem, this.ps_type_val[i].sc_size),
         date: this.curr_sel_date,
         type: this.myType,
@@ -80,6 +71,13 @@ export class SetThaliQuantPage {
       });
     }
 
+  }
+  compareObj(a, b) {
+    if (a.sc_sort < b.sc_sort)
+      return -1;
+    if (a.sc_sort > b.sc_sort)
+      return 1;
+    return 0;
   }
 
   dismiss() {
@@ -127,6 +125,8 @@ export class SetThaliQuantPage {
       let item = itemObj.item,
         item_name = itemObj.item_name,
         price = itemObj.price,
+        discount = itemObj.discount,
+        discount_per = itemObj.discount_per,
         quant = 1,
         size = itemObj.size,
         type = itemObj.type,
@@ -137,7 +137,7 @@ export class SetThaliQuantPage {
         ps_unit = itemObj.ps_unit;
 
 
-      this.thaliProvider.addToThali(item, item_name, price, quant, size, type, p_veg, ps_type, ps_size_id, ps_quant, ps_unit);
+      this.thaliProvider.addToThali(item, item_name, price, discount, discount_per, quant, size, type, p_veg, ps_type, ps_size_id, ps_quant, ps_unit);
 
       let index = this.checkItemInItemList(item, size);
       if (index >= 0) {

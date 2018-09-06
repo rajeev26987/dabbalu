@@ -25,9 +25,10 @@ export class SetQuantPage {
   ps_type_val: any;
   p_veg: boolean;
   itemObj: any;
+  itemAll: any;
  // itemSize: string[];
   //itemPrice: number[];
-  itemList: Array<{ item: number, item_name: string, size: string, price: number, quant: number, date: number, type: string, p_veg: boolean, ps_type: string, ps_size_id: number, ps_quant: number, ps_unit: string }>;
+  itemList: Array<{ item: number, item_name: string, size: string, price: number, discount: number, discount_per: number, quant: number, date: number, type: string, p_veg: boolean, ps_type: string, ps_size_id: number, ps_quant: number, ps_unit: string }>;
   curr_sel_date: number;
 
 
@@ -43,20 +44,7 @@ export class SetQuantPage {
     this.ps_type_val = navParams.get('ps_type_val');
     this.p_veg = navParams.get('p_veg');
 
-
-    /*if (this.myType == "r") {
-      this.itemSize = ['half', 'full'];
-      this.itemPrice = [this.myPrice, Math.round(this.myPrice * 1.5)];
-    }
-    else if (this.myType == 'b') {
-      this.itemSize = ['Pack of 3', 'Pack of 5'];
-      this.itemPrice = [this.myPrice, Math.round(this.myPrice * 1.5)];
-    }
-    else {
-      this.itemSize = ['small', 'medium', 'large'];
-      this.itemPrice = [this.myPrice, Math.round(this.myPrice * 1.2), Math.round(this.myPrice * 1.4)];
-    }*/
-
+    this.ps_type_val.sort(this.compareObj);
 
     this.itemList = [];
     this.curr_sel_date = this.get_curr_sel_date();
@@ -66,6 +54,8 @@ export class SetQuantPage {
         item_name: this.myItemName,
         size: this.ps_type_val[i].sc_size,
         price: this.ps_type_val[i].ps_price,
+        discount: this.ps_type_val[i].discount,
+        discount_per: this.ps_type_val[i].discount_per,
         quant: this.getItemQuantInCart(this.myItem, this.ps_type_val[i].sc_size),
         date: this.curr_sel_date,
         type: this.myType,
@@ -76,6 +66,14 @@ export class SetQuantPage {
         ps_unit: this.ps_type_val[i].ps_unit
       });
     }
+  }
+
+  compareObj(a, b) {
+    if (a.sc_sort < b.sc_sort)
+      return -1;
+    if (a.sc_sort > b.sc_sort)
+      return 1;
+    return 0;
   }
 
   dismiss() {
@@ -117,8 +115,8 @@ export class SetQuantPage {
     let item = itemObj.item,
       item_name = itemObj.item_name,
       price = itemObj.price,
-      discount = 0,
-      discount_per = 0,
+      discount = itemObj.discount,
+      discount_per = itemObj.discount_per,
       quant = 1,
       size = itemObj.size,
       type = itemObj.type,
