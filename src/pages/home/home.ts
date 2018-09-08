@@ -95,8 +95,6 @@ export class HomePage{
       ps_unit = itemObj.ps_unit,
       sub_item = itemObj.sub_item;
 
-    console.log("yyyyy " + p_veg, ps_size_id, ps_quant, ps_unit);
-
     this.appService.addToCart(item, item_name, price, discount, discount_per, quant, size, type, p_veg, ps_type, ps_size_id, ps_quant, ps_unit, sub_item);
    }
 
@@ -164,7 +162,7 @@ export class HomePage{
   }
 
   openSetThaliModal(size, for_date) {
-    console.log("opening thali model");
+
     let modal = this.modalCtrl.create(SelectThaliPage, { size: size, for_date: for_date }, { showBackdrop: true, enableBackdropDismiss: true });
     modal.present();
   }
@@ -173,8 +171,6 @@ export class HomePage{
   openEditScheduleModal() {
     let schObj = this.getScheduleItemsForDate();
     let for_date = this.get_curr_sel_date();
-
-    console.log("Edit schedule model");
     let modal = this.modalCtrl.create(EditSchedulePage, { schObj: schObj, for_date: for_date }, { showBackdrop: true, enableBackdropDismiss: true });
     modal.present();
   }

@@ -19,7 +19,7 @@
             <ion-col>
               <ion-row *ngFor="let x of repeatNtimes(citem.quant)">
 
-                <ion-col col-9 class="cart-description">
+                <ion-col col-7 class="cart-description">
                   <div>
                     <ion-icon [class.item-non-veg]="citem.p_veg==0" [class.item-veg]="citem.p_veg==1" ios="ios-radio-button-on" md="md-radio-button-on"></ion-icon> {{
 citem.item_name
@@ -32,10 +32,11 @@ citem.item_name
                     </div>
                   </div>
                 </ion-col>
-                <ion-col align-self-center class="cart-price">
-                  &#x20b9;{{getPriceBeforeDiscount(citem.price, citem.discount, 1) }}
+                <ion-col col-4 align-self-center class="cart-price">
+                  <span [hidden]="citem.discount<=0" class="before-discount-price"> &#x20b9;{{getPriceBeforeDiscount(citem.price, citem.discount, 1) }}</span>
+                  <span> &#x20b9;{{citem.price}}</span>
                 </ion-col>
-                <ion-col align-self-center class="cart-price">
+                <ion-col col-1 align-self-center class="cart-price">
                   <ion-icon name="trash" style="color:red" (click)="scheduleForDelete(citem.sq_id)"></ion-icon>
                 </ion-col>
               </ion-row>
@@ -51,8 +52,9 @@ citem.item_name
               Item total
             </ion-col>
             <ion-col class="cart-price">
-              &#x20b9;{{scheduledItemPrice()}}
-            </ion-col>
+              &#x20b9;{{scheduledItemPrice()
+                  }}
+                </ion-col>
 
           </ion-row>
           <ion-row [hidden]="discountOnScheduledItem()<=0">
@@ -96,6 +98,14 @@ citem.item_name
     No more items
   </div>
   <div>
-    <ion-buttons end>  <button [disabled]="!getSecheduleForDeletionLen()" ion-button outline color="secondary" small (click)="updateSchedule()">Update</button></ion-buttons>
+    <ion-row>
+      <ion-col col-6>
+        <ion-buttons start>  <button [disabled]="!getSecheduleForDeletionLen()" ion-button outline color="danger" small (click)="resetSchedule()">Reset</button></ion-buttons>
+      </ion-col>
+      <ion-col col-6>
+        <ion-buttons end>  <button [disabled]="!getSecheduleForDeletionLen()" ion-button outline color="secondary" small (click)="updateSchedule()">Update</button></ion-buttons>
+      </ion-col>
+    </ion-row>
+    
   </div>
 </ion-content>

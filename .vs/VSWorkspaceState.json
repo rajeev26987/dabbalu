@@ -6,10 +6,11 @@
     "\\src\\assets",
     "\\src\\assets\\imgs",
     "\\src\\pages",
+    "\\src\\pages\\home",
+    "\\src\\pages\\set-quant",
     "\\src\\pages\\set-thali-quant",
-    "\\src\\pages\\tabs",
-    "\\src\\providers",
-    "\\src\\providers\\app"
+    "\\src\\pages\\tabs"
   ],
+  "SelectedNode": "\\src\\providers\\app\\thali.ts",
   "PreviewInSolutionExplorer": false
 }

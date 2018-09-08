@@ -9,6 +9,7 @@ import { AppProvider } from '../../providers/app/app';
 export class EditSchedulePage {
 
   schObj: any;
+  iniSchObj: any;
   for_date: number;
   monthNames: string[];
   tax_per: number;
@@ -19,6 +20,7 @@ export class EditSchedulePage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public renderer: Renderer, public viewCtrl: ViewController, public appService: AppProvider) {
     this.schObj = JSON.parse(JSON.stringify(navParams.get('schObj')));
+    this.iniSchObj = JSON.stringify(navParams.get('schObj'));
     console.log("b ss" + JSON.stringify(navParams.get('schObj')));
     console.log("ss item " + JSON.stringify(this.schObj));
     this.schDelObj = [];
@@ -45,6 +47,12 @@ export class EditSchedulePage {
   updateSchedule() {
     this.appService.updateSchedule(this.schDelObj);
     this.dismiss();
+  }
+
+  resetSchedule() {
+    this.schObj = JSON.parse(this.iniSchObj);
+    this.schDelObj = [];
+
   }
 
   getScheduleItemsLenForDate() {
@@ -140,5 +148,6 @@ export class EditSchedulePage {
   getPriceBeforeDiscount(price, discount, quant) {
     return (Number(price) + Number(discount)) * Number(quant);
   }
+
 
 }

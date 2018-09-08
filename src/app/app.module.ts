@@ -21,12 +21,16 @@ import { ThaliProvider } from '../providers/app/thali';
 import { SetThaliQuantPage } from '../pages/set-thali-quant/set-thali-quant';
 import { MyhomePage } from '../pages/myhome/myhome';
 import { EditSchedulePage } from '../pages/edit-schedule/edit-schedule';
+import { SchedulePage } from '../pages/schedule/schedule';
+import { PaymentPage } from '../pages/payment/payment';
 
 @NgModule({
   declarations: [
     MyApp,
     AboutPage,
+    SchedulePage,
     ContactPage,
+    PaymentPage,
       AccountPage,
     HomePage,
       MyhomePage,
@@ -46,7 +50,9 @@ import { EditSchedulePage } from '../pages/edit-schedule/edit-schedule';
   entryComponents: [
     MyApp,
     AboutPage,
+    SchedulePage,
     ContactPage,
+    PaymentPage,
     AccountPage,
     HomePage,
     MyhomePage,

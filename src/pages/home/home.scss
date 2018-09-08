@@ -17,7 +17,7 @@ page-home {
     }
 
     .schedule-item-style {
-      background-color: #fafafc
+      background-color: #e9effa
     }
 
     .cart-item-card {
@@ -31,6 +31,12 @@ page-home {
       width: 100%;
       padding-left: 5%;
       text-align: right;
+    }
+
+    .before-discount-price {
+      color: #828080;
+      text-decoration: line-through;
+      padding-right: 5px;
     }
 
     .cart-description {

@@ -1,0 +1,40 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Payments
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <div>
+    <div [hidden]="getOutstandingBal()<=0" class="outstanding-bal payment-div">
+      <div class="payment-header">Outstanding balance</div>
+      <div class="payment-content">&#x20b9;{{getOutstandingBal()}}  <span style="float:right; padding-right:10px; color:cornflowerblue">Pay &#x20b9;{{getOutstandingBal()}} </span></div>
+      <ion-chip color="danger">
+        <ion-label>Please pay &#x20b9;{{getOutstandingBal()}} for next delievery</ion-label>
+      </ion-chip>
+    </div>
+    <div class="payment-div">
+      <div class="payment-header">Current Balance</div>
+      <div class="payment-content">&#x20b9;{{getWalletBal()}}  <span style="float:right;  color:cornflowerblue">Add money</span></div>
+    </div>
+    <div class="payment-div">
+      <div class="payment-header">Amount required for next delivery</div>
+      <div class="payment-content">&#x20b9;{{getNextScheduleItemDatePay()}} <span [hidden]="getNextScheduleItemDatePay()<=0" style="float:right; color:cornflowerblue">Add &#x20b9;{{getNextScheduleItemDatePay()}} to wallet</span></div>
+      <ion-chip [hidden]="getNextScheduleItemDatePay()<=0" color="danger">
+        <ion-label>Please pay &#x20b9;{{getNextScheduleItemDatePay()}} before delievery</ion-label>
+      </ion-chip>
+    </div>
+    <div class="payment-div">
+      <div class="payment-header">Amount required for all scheduled deliveries</div>
+      <div class="payment-content">&#x20b9;{{getAllScheduleItemPay()}} <span [hidden]="getAllScheduleItemPay()<=0"  style="float:right;  color:cornflowerblue">Add &#x20b9;{{getAllScheduleItemPay()}} to wallet</span></div>
+    </div>
+    <div class="payment-div">
+      <div>View transaction history</div>
+    </div>
+    <div class="payment-div">
+      <div>View monthly expenditure/saving</div>
+    </div>
+  </div>
+</ion-content>

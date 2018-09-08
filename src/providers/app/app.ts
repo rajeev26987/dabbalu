@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { stagger } from '@angular/core/src/animation/dsl';
-import { LoadingController } from 'ionic-angular';
+import { LoadingController, ToastController } from 'ionic-angular';
 
 
 
@@ -32,10 +32,11 @@ export class AppProvider {
   cur_sel_date: number;
   monthNames: string[];
   loader: any;
+  msg: any;
  // default_sub_item: { item: string, price: number, size: string, quant: number };
 
 
-  constructor(private http: HttpClient, public loadingCtrl: LoadingController) {
+  constructor(private http: HttpClient, public loadingCtrl: LoadingController, public toastCtrl: ToastController) {
     this.schedule_init = 0;
     this.getScheduledItems();
     this.menu_init = 0;
@@ -107,7 +108,6 @@ export class AppProvider {
 
     }
 
-    console.log("curr day " + this.cur_sel_date);
   }
 
   menuInitialized() {
@@ -126,12 +126,17 @@ export class AppProvider {
         this.loader.dismiss();
         this.menu_items = r;
         this.menu_init = 1;
-        console.log("success menu init " + this.menu_init);
+
       },
         error => {
           this.loader.dismiss();
           this.menu_init = 2;
-          console.log("some error menu init " + this.menu_init);
+           this.msg = this.toastCtrl.create({
+            message: 'Menu not loaded',
+            duration: 3000
+           });
+          this.msg.present();
+
         }
       );
     }
@@ -140,14 +145,13 @@ export class AppProvider {
   getScheduledItems(date?) {
     if (this.schedule_init != 1 && this.schedule_init != 3) {
       this.schedule_init = 3;
-      this.http.get("http://dabbalu.com/get_schedule_item.php").subscribe(r => {     
+      this.http.get("http://dabbalu.com/get_schedule_new.php").subscribe(r => {     
         this.schedule_items = r;
         this.schedule_init = 1;
-        console.log("success schedule init " + JSON.stringify(r));
+
       },
         error => {
           this.schedule_init = 2;
-          console.log("some error menu init " );
         }
       );
     }
@@ -163,9 +167,8 @@ export class AppProvider {
     let cart = JSON.stringify(this.getCartWithDate(date));
    
 
-    this.http.post("http://dabbalu.com/schedule_item.php", cart).subscribe(r => {
+    this.http.post("http://dabbalu.com/schedule_item_new.php", cart).subscribe(r => {
       
-      console.log("success created schedule " + JSON.stringify(r));
       this.schedule_items = r;
       this.schedule_init = 1;
       this.removeFromCartForDate(date);
@@ -173,7 +176,11 @@ export class AppProvider {
     },
       error => {
         this.loader.dismiss();
-        console.log("some error in create schedule ");
+        this.msg = this.toastCtrl.create({
+          message: "Couldn't create schedule",
+          duration: 3000
+        });
+        this.msg.present();
       }
     );
   }
@@ -186,27 +193,109 @@ export class AppProvider {
     this.loader.present();
     let data = JSON.stringify(schDel);
    
-    this.http.post("http://dabbalu.com/sechedule_delete.php", data).subscribe(r => {
+    this.http.post("http://dabbalu.com/sechedule_delete_new.php", data).subscribe(r => {
       this.schedule_items = r;
       this.schedule_init = 1;
       this.loader.dismiss();
-      console.log("new schedule " + JSON.stringify(r));
-
     },
       error => {
         this.loader.dismiss();
-        console.log("some error in create schedule ");
+        this.msg = this.toastCtrl.create({
+          message: "Couldn't update schedule",
+          duration: 3000
+        });
+        this.msg.present();
       }
     );
 
   }
+  groupScheduledItemsLength() {
+    let itemObj = this.groupScheduledItems();
+    if (Array.isArray(itemObj)) {
+      return itemObj.length;
+    }
+    else {
+      return 0;
+    }
+  }
 
-  groupScheduledItemsForDate(date) {
+  groupScheduledItems() {
+    let oitemObj = this.getAllScheduleItems();
+    let pThis = this;
+    if (oitemObj != 0) {
+ 
+      let olen = oitemObj.length;
+      let oschItem: Array<{ date: number, data: Array<{ item: number, item_name: string, price: number, discount: number, discount_per: number, size: string, quant: number, date: number, type: string, p_veg: boolean, ps_type: string, ps_size_id: number, ps_quant: number, ps_unit: string, sub_item: Array<{ item: number, item_name: string, price: number, discount: number, discount_per, number, size: string, quant: number, type: string, p_veg: boolean, ps_type: string, ps_size_id: number, ps_quant: number, ps_unit: string }> }> }>;
+      oschItem = [];
+      for (let x = 0; x < olen; x++) {
+        
+        let itemObj = oitemObj[x].data
+        let len = itemObj.length;
+        let schItem: Array<{ item: number, item_name: string, price: number, discount: number, discount_per: number, size: string, quant: number, date: number, type: string, p_veg: boolean, ps_type: string, ps_size_id: number, ps_quant: number, ps_unit: string, sub_item: Array<{ item: number, item_name: string, price: number, discount: number, discount_per, number, size: string, quant: number, type: string, p_veg: boolean, ps_type: string, ps_size_id: number, ps_quant: number, ps_unit: string }> }>;
+        schItem = [];
+      for (let i = 0; i < len; i++) {
+        let subO = [];
+        let myIndex;
+        if (itemObj[i].item == 100) {
+          subO = itemObj[i].sub_item;
+          myIndex = schItem.findIndex(function (obj) {
+            return (obj.item === itemObj[i].item && obj.size === itemObj[i].size && obj.date == itemObj[i].date && pThis.sameObj(obj.sub_item, subO));
+          });
+        }
+        else {
+          subO = [];
+          myIndex = schItem.findIndex(function (obj) {
+            return (obj.item === itemObj[i].item && obj.size === itemObj[i].size && obj.date == itemObj[i].date);
+          });
+        }
+
+        if (myIndex >= 0) {
+        
+          schItem[myIndex].quant += Number(itemObj[i].quant);
+          schItem[myIndex].price += Number(itemObj[i].price) * Number(itemObj[i].quant);
+          schItem[myIndex].discount += Number(itemObj[i].discount) * Number(itemObj[i].quant);
+        }
+        else {
+
+          schItem.push({
+            item: itemObj[i].item,
+            item_name: itemObj[i].item_name,
+            price: Number(itemObj[i].price) * Number(itemObj[i].quant),
+            discount: Number(itemObj[i].discount) * Number(itemObj[i].quant),
+            discount_per: Number(itemObj[i].discount_per),
+            size: itemObj[i].size,
+            quant: Number(itemObj[i].quant),
+            date: itemObj[i].date,
+            type: itemObj[i].type,
+            p_veg: itemObj[i].p_veg,
+            ps_type: itemObj[i].ps_type,
+            ps_size_id: itemObj[i].ps_size_id,
+            ps_quant: itemObj[i].ps_quant,
+            ps_unit: itemObj[i].ps_unit,
+            sub_item: subO
+          });
+        }
+      }
+
+        oschItem.push({
+          date: oitemObj[x].data,
+          data: schItem
+        });
+    }
+      return oschItem;
+    }
+    else {
+      return 0;
+    }
+
+  }
+
+  groupScheduledItemsForDate(date?) {
 
     let itemObj = this.getScheduleItemsForDate(date);
     let pThis = this;
     if (itemObj != 0) {
-   //   console.log("sssssc item" + JSON.stringify(itemObj));
+
       let len = itemObj.length;
       let schItem: Array<{ item: number, item_name: string, price: number, discount: number, discount_per: number, size: string, quant: number, date: number, type: string, p_veg: boolean, ps_type: string, ps_size_id: number, ps_quant: number, ps_unit: string, sub_item: Array<{ item: number, item_name: string, price: number, discount: number, discount_per, number, size: string, quant: number, type: string, p_veg: boolean, ps_type: string, ps_size_id: number, ps_quant: number, ps_unit: string }> }>;
       schItem = [];
@@ -227,10 +316,10 @@ export class AppProvider {
         }
         
         if (myIndex >= 0) {
-          console.log("element already there");
+ 
           schItem[myIndex].quant += Number(itemObj[i].quant);
           schItem[myIndex].price += Number(itemObj[i].price) * Number(itemObj[i].quant);
-          schItem[myIndex].discount += Number(itemObj[i].discount);
+          schItem[myIndex].discount += Number(itemObj[i].discount)  * Number(itemObj[i].quant);
         }
         else {
 
@@ -238,7 +327,7 @@ export class AppProvider {
             item: itemObj[i].item,
             item_name: itemObj[i].item_name,
             price: Number(itemObj[i].price) * Number(itemObj[i].quant),
-            discount: Number(itemObj[i].discount),
+            discount: Number(itemObj[i].discount) * Number(itemObj[i].quant),
             discount_per: Number(itemObj[i].discount_per),
             size: itemObj[i].size,
             quant: Number(itemObj[i].quant),
@@ -262,63 +351,116 @@ export class AppProvider {
   }
 
 
+  getAllScheduleItems() {
+    let dateObj = new Date();
+    let date = this.formatDate(dateObj);
+    if (this.schedule_init == 1) {
+      let obj = this.schedule_items.filter(item => item.date >= date);
+      if (obj) {
+        return obj;
+      }    
+    }
+    else {
+      this.getScheduledItems();
+    }
+    return 0;
+  }
+  getAllScheduleItemsLength() {
+    let obj = this.getAllScheduleItems();
+    if (obj) {
+      return this.getAllScheduleItems().length;
+    }
+    else {
+      return 0;
+    }
+    
+  }
 
+  getAllScheduleItemPrice() {
+    let obj = this.getAllScheduleItems();
+    let p = 0;
+    if (obj != 0) {
+      
+      for (let i of obj) {
+        for (let x of i.data) {
+          p += Number(x.price)  * Number(x.quant);
+        }        
+      }     
+    }
+    return Math.round(p * (1 + this.tax_per));
+  }
+
+  getNextScheduleItemDatePrice() {
+    let obj = this.getAllScheduleItems();
+    let p = 0;
+    let d = 0;
+    if (obj != 0) {
+      let i = obj[0].data;
+      d = obj[0].date;
+      for (let x of i) {
+        p += Number(x.price) * Number(x.quant);
+      }
+    }
+    return [d, Math.round(p * (1 + this.tax_per))];
+  }
 
   getScheduleItemsForDate(date?) {
     if (!date) {
       date = this.cur_sel_date;
     }
     if (this.schedule_init == 1) {
-      return this.schedule_items.filter(item => item.date == date);
+      let obj = this.schedule_items.filter(item => item.date == date);
+
+      if (obj.length > 0) {
+        return obj[0].data;
+      }
     }
     else {
       this.getScheduledItems();
-      return 0;
+      
     }
-
-  }
-
-  scheduledItemPrice() {
-    let p: number;
-    p = 0;
-    for (let x of this.getScheduleItemsForDate()) {
-      p += (Number(x.price) + Number(x.discount)) * x.quant;
-    }
-    return Math.round(p);
-  }
-  scheduledItemPriceAfterDiscount() {
-    let p: number;
-    p = 0;
-    for (let x of this.getScheduleItemsForDate()) {
-      p += Number(x.price) * Number(x.quant);
-    }
-    return Math.round(p);
-  }
-  discountOnScheduledItem() {
-    let p: number;
-    p = 0;
-    for (let x of this.getScheduleItemsForDate()) {
-      p += Number(x.discount) * Number(x.quant);
-    }
-    return Math.round(p);
-  }
-
-  taxOnScheduledItem() {
-    return Math.round(this.scheduledItemPriceAfterDiscount() * this.tax_per);
-  }
-  delieveryChargeOnScheduledItem() {
-    return Math.round(this.deliver_ch);
-  }
-
-  scheduledItemPriceTotal() {
-    return (this.scheduledItemPriceAfterDiscount() + this.taxOnScheduledItem() + this.delieveryChargeOnScheduledItem());
+    return 0;
   }
 
   getScheduleItemsLenForDate(date?) {
     return this.getScheduleItemsForDate(date).length;
   }
 
+  scheduledItemPrice(date?) {
+    let p: number;
+    p = 0;
+    for (let x of this.getScheduleItemsForDate(date)) {
+      p += (Number(x.price) + Number(x.discount)) * x.quant;
+    }
+    return Math.round(p);
+  }
+  scheduledItemPriceAfterDiscount(date?) {
+    let p: number;
+    p = 0;
+    for (let x of this.getScheduleItemsForDate(date)) {
+      p += Number(x.price) * Number(x.quant);
+    }
+    return Math.round(p);
+  }
+  discountOnScheduledItem(date?) {
+    let p: number;
+    p = 0;
+    for (let x of this.getScheduleItemsForDate(date)) {
+      p += Number(x.discount) * Number(x.quant);
+    }
+    return Math.round(p);
+  }
 
+  taxOnScheduledItem(date?) {
+    return Math.round(this.scheduledItemPriceAfterDiscount(date) * this.tax_per);
+  }
+  delieveryChargeOnScheduledItem() {
+    return Math.round(this.deliver_ch);
+  }
+
+  scheduledItemPriceTotal(date?) {
+    return (this.scheduledItemPriceAfterDiscount(date) + this.taxOnScheduledItem() + this.delieveryChargeOnScheduledItem());
+  }
 
 
 
@@ -338,7 +480,7 @@ export class AppProvider {
 
   getMenuWithType(day, type) {
    
-    console.log("getting menu with type menu init " + this.menu_init);
+
     if (this.menu_init == 1) {
       if (type == 'r') {
         return this.menu_items[day].filter(item => item.type == type || item.type == 'b');
@@ -495,10 +637,10 @@ export class AppProvider {
     let myIndex = this.cart_items.findIndex(function (obj) {
       return (obj.item === item && obj.size === size && obj.date == pThis.cur_sel_date && pThis.sameObj(obj.sub_item, subObj));
     });
-    console.log("my index " + myIndex);
+
 
     if (myIndex >= 0) {
-      console.log("element already there");
+
       this.cart_items[myIndex].quant++;
     }
     else {
@@ -521,7 +663,7 @@ export class AppProvider {
       });
     }
     localStorage.setItem("cart", JSON.stringify(this.cart_items));
-    console.log("cart " + JSON.stringify(this.cart_items));
+
   }
 
   cartPrice() {
@@ -566,16 +708,12 @@ export class AppProvider {
       sub_item = [];
     }
 
-     console.log("print " + item + " " + price + " " + quant + " " + size + " " + this.cur_sel_date);
-
      let pThis = this;
     let myIndex =   this.cart_items.findIndex(function(obj) {
       return (obj.item === item && obj.size === size && obj.date == pThis.cur_sel_date && pThis.sameObj(obj.sub_item, sub_item));
        });
-    console.log("my index "+myIndex);
-
-        if(myIndex>= 0){
-          console.log("element already there");
+  
+        if(myIndex>= 0){        
             this.cart_items[myIndex].quant++;
         }
         else{
@@ -598,7 +736,6 @@ export class AppProvider {
             });
         }
      localStorage.setItem("cart", JSON.stringify(this.cart_items));
-     console.log("carttt " + JSON.stringify(this.cart_items));
    }
 
   removeFromCart(item, size) {
@@ -606,7 +743,6 @@ export class AppProvider {
     let index = this.cart_items.findIndex(function (obj) {
       return (obj.item == item && obj.size == size && obj.date === pThis.cur_sel_date);
     });
-    console.log("removing from cart item: " + item + " size: " + size + " index: " + index);
 
     if (index >= 0) {
       if (this.cart_items[index].quant > 1) {
@@ -671,9 +807,14 @@ export class AppProvider {
   return r;
  }
 
-  showDateStr() {
-    var d = this.cur_sel_date + "",
-      r = d.substring(6,8) + " " + this.monthNames[Number(d.substring(4,6))-1];
+  showDateStr(date?) {
+    let d;
+    if (date) { d = date + "";}
+    else { d = this.cur_sel_date + ""; }
+
+  
+
+    let  r = d.substring(6,8) + " " + this.monthNames[Number(d.substring(4,6))-1];
     return r;
     
   }

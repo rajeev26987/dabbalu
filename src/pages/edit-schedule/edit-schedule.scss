@@ -25,8 +25,13 @@ page-edit-schedule {
     text-align: right;
   }
 
-  .no-items{
-
+  .no-items {
     padding: 20px;
+  }
+
+  .before-discount-price {
+    color: #828080;
+    text-decoration: line-through;
+    padding-right: 5px;
   }
 }
