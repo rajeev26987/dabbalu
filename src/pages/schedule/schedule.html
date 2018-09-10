@@ -2,19 +2,27 @@
   <ion-navbar>
     <ion-title>
       Schedule
+      <span class="toggle-all-icon" ><ion-icon name="arrow-dropdown-circle" (click)="showAllDate()"></ion-icon></span>
+      <span class="toggle-all-icon"  ><ion-icon name="arrow-dropup-circle" (click)="hideAllDate()"></ion-icon></span>
     </ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content >
   <div *ngIf="groupScheduledItemsLength()>0">
-    <div *ngFor="let dt of getAllScheduleItems()">
+    <div *ngFor="let dt of groupScheduledItems()">
 
       <div  class="schedule-item-style">
 
-        <div class="cart-item-card" padding>
-          <div class="my-date-style">{{showDateStr(dt.date)}}</div>
+        <div class="cart-item-card" >
+          <div class="my-date-style" (click)="toggleDate(dt.date)">
+            {{showDateStr(dt.date)}}
+            <span [hidden]="!showForDate(dt.date)" class="my-date-drop-icon"><ion-icon name="arrow-dropdown"></ion-icon></span>
+            <span [hidden]="showForDate(dt.date)" class="my-date-drop-icon" ><ion-icon name="arrow-dropup"></ion-icon></span>
+          </div>
+          <div class="schedule-item-div" [hidden]="showForDate(dt.date)">
           <div><b>Scheduled Items</b></div>
+          
           <div class="cart-item">
             <ion-grid>
               <ion-row *ngFor="let citem of dt.data">
@@ -83,14 +91,16 @@
           <div>
             <ion-buttons end>  <button ion-button outline color="secondary" small (click)="openEditScheduleModal(dt.date)">Update</button></ion-buttons>
           </div>
+          </div>
         </div>
       </div>
 
 
     </div>
   </div>
-  <div *ngIf="groupScheduledItemsLength()<=0">
-    No schedule
+  <div class="schedule-empty-div" *ngIf="groupScheduledItemsLength()<=0">
+    <ion-icon name="ios-alarm-outline" class="schedule-empty-icon"></ion-icon>
+    <div class="schedule-empty-content">Scheduled items will appear here</div>
   </div>
 
 </ion-content>

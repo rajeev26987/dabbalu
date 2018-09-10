@@ -23,6 +23,7 @@ import { MyhomePage } from '../pages/myhome/myhome';
 import { EditSchedulePage } from '../pages/edit-schedule/edit-schedule';
 import { SchedulePage } from '../pages/schedule/schedule';
 import { PaymentPage } from '../pages/payment/payment';
+import { CartPage } from '../pages/cart/cart';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { PaymentPage } from '../pages/payment/payment';
     AboutPage,
     SchedulePage,
     ContactPage,
+    CartPage,
     PaymentPage,
       AccountPage,
     HomePage,
@@ -52,6 +54,7 @@ import { PaymentPage } from '../pages/payment/payment';
     AboutPage,
     SchedulePage,
     ContactPage,
+    CartPage,
     PaymentPage,
     AccountPage,
     HomePage,

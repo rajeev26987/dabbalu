@@ -34,4 +34,18 @@ page-edit-schedule {
     text-decoration: line-through;
     padding-right: 5px;
   }
+
+  .schedule-item-div {
+    padding: 15px;
+  }
+
+  .deleted-schedule-div {
+    padding: 15px;
+    border-top: 5px solid lightgrey
+  }
+
+  .no-more-item {
+    padding: 30px;
+    text-align: center;
+  }
 }

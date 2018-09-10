@@ -13,12 +13,12 @@ import { LoadingController, ToastController } from 'ionic-angular';
 */
 @Injectable()
 export class AppProvider {
-    icons: string[];
-    item: string[];
-    price: number[];
-    item_type: string[];
-    all_item: string[];
-    cart_items: Array<{ item: number, item_name: string, price: number, discount: number, discount_per: number, size: string, quant: number, date: number, type: string, p_veg: boolean, ps_type: string, ps_size_id: number,ps_quant: number, ps_unit:string, sub_item: Array<{ item: number, item_name: string, price: number, discount: number, discount_per, number, size: string, quant: number, type: string, p_veg: boolean, ps_type: string, ps_size_id: number,ps_quant: number, ps_unit:string}>}>;
+  icons: string[];
+  item: string[];
+  price: number[];
+  item_type: string[];
+  all_item: string[];
+  cart_items: Array<{date: number, data:Array<{ item: number, item_name: string, price: number, discount: number, discount_per: number, size: string, quant: number, date: number, type: string, p_veg: boolean, ps_type: string, ps_size_id: number, ps_quant: number, ps_unit: string, sub_item: Array<{ item: number, item_name: string, price: number, discount: number, discount_per, number, size: string, quant: number, type: string, p_veg: boolean, ps_type: string, ps_size_id: number, ps_quant: number, ps_unit: string }> }>}>;
 
   menu_items: any;
   menu_init: number;
@@ -40,8 +40,14 @@ export class AppProvider {
     this.schedule_init = 0;
     this.getScheduledItems();
     this.menu_init = 0;
-    localStorage.setItem("cart", "");
-    this.cart_items = [];
+    let iniCart = localStorage.getItem("cart");
+    if (iniCart) {
+      this.cart_items = JSON.parse(iniCart);
+    }
+    else {
+      this.cart_items = [];
+    }
+    
 
 
     this.tax_per = 0.12;
@@ -278,7 +284,7 @@ export class AppProvider {
       }
 
         oschItem.push({
-          date: oitemObj[x].data,
+          date: oitemObj[x].date,
           data: schItem
         });
     }
@@ -502,12 +508,29 @@ export class AppProvider {
    
   }
 
-
   getCart() {
-    return this.cart_items
+    let dateObj = new Date();
+    let date = this.formatDate(dateObj);
+    return this.cart_items.filter(obj => obj.date >= date);
   }
 
   getCartWithDate(date?) {
+    if (!date) {
+      date = this.cur_sel_date;
+    }
+    let cartObj = this.cart_items.filter(item => item.date == date);
+    if (cartObj && cartObj[0]) {
+      return cartObj[0].data;
+    }
+    else {
+    let obj:  Array<{ item: number, item_name: string, price: number, discount: number, discount_per: number, size: string, quant: number, date: number, type: string, p_veg: boolean, ps_type: string, ps_size_id: number, ps_quant: number, ps_unit: string, sub_item: Array<{ item: number, item_name: string, price: number, discount: number, discount_per, number, size: string, quant: number, type: string, p_veg: boolean, ps_type: string, ps_size_id: number, ps_quant: number, ps_unit: string }> }>;
+      obj = [];
+      return obj;
+    }
+  }
+ 
+
+ /* getCartWithDate(date?) {
     if (date) {
       return this.cart_items.filter(item => item.date == date);
     }
@@ -515,104 +538,94 @@ export class AppProvider {
       return this.cart_items.filter(item => item.date == this.cur_sel_date);
     }
     
-  }
+  }*/
   
-    CartLength(){
+  CartLength() {
+    let cartObj = this.getCart();
+    if (cartObj) {
       return this.cart_items.length;
-    }
-
-
-  CartLengthForDate(date?) {
-    if (date) {
-      return this.getCartWithDate(date).length;
-    }
-    else {
-      return this.getCartWithDate().length;
-    }
-   
-  }
-
-  checkItemInCart(item, size) {
-    let pThis = this;
-    let myIndex = this.cart_items.findIndex(function (obj) {
-      return (obj.item === item && obj.size === size && obj.date == pThis.cur_sel_date);
-    });
-    return myIndex;
-  }
-
-  getItemQuantInCart(item, size) {
-    let pThis = this;
-    let myIndex = this.cart_items.findIndex(function (obj) {
-      return (obj.item === item &&  obj.size === size && obj.date == pThis.cur_sel_date);     
-    });
-    if (myIndex >= 0) {
-      return this.cart_items[myIndex].quant;
     }
     else {
       return 0;
     }
     
+    }
+
+
+  CartLengthForDate(date?) {
+      return this.getCartWithDate(date).length;
+  }
+
+  checkItemInCart(item, size, date?) {
+    let pThis = this;
+    let myIndex = this.getCartWithDate(date).findIndex(function (obj) {
+      return (obj.item === item && obj.size === size && obj.date == pThis.cur_sel_date);
+    });
+    return myIndex;
+  }
+
+  getItemQuantInCart(item, size,date?) {
+    let pThis = this;
+    let cartObj = this.getCartWithDate(date);
+    let myIndex = cartObj.findIndex(function (obj) {
+      return (obj.item === item &&  obj.size === size);     
+    });
+    if (myIndex >= 0) {
+      return cartObj[myIndex].quant;
+    }
+    else {
+      return 0;
+    }    
   }
 
 
-  cartQuantity() {
-    let q: number;
-    q = 0;
-    for (let x of this.cart_items) {
+  cartQuantity(date?) {
+    let q = 0;
+    let cartObj = this.getCartWithDate(date);
+    for (let x of cartObj) {
       q += x.quant
     }
     return Math.round(q);
   }
 
-  cartQuantityForItem(item) {
+  cartQuantityForItem(item,date?) {
     let q: number;
     q = 0;
-    for (let x of this.cart_items) {
-      if (item == x.item && x.date == this.cur_sel_date) {
+    let cartObj =  this.getCartWithDate(date);
+    for (let x of cartObj) {
+      if (item == x.item) {
         q += x.quant;
       }  
     }
     return Math.round(q);
   }
 
-  cartQuantityForThali(itemObj) {
+  cartQuantityForThali(itemObj, date?) {
     let pThis = this;
-    let q: number;
-    q = 0;
-    let myIndex = this.cart_items.findIndex(function (obj) {
-      return (obj.item === itemObj.item && obj.size === itemObj.size && obj.date == pThis.cur_sel_date && obj.sub_item == itemObj.sub_item );
+    let q = 0;
+    let cartObj = this.getCartWithDate(date);
+    let myIndex = cartObj.findIndex(function (obj) {
+      return (obj.item === itemObj.item && obj.size === itemObj.size &&  obj.sub_item == itemObj.sub_item );
     });
     if (myIndex > -1) {
-      q= this.cart_items[myIndex].quant;
+      q = cartObj[myIndex].quant;
     }
     return Math.round(q);
   }
 
-  cartQuantityForItemSize(itemObj) {
+  cartQuantityForItemSize(itemObj, date?) {
     let pThis = this;
-    let q: number;
-    q = 0;
-    let myIndex = this.cart_items.findIndex(function (obj) {
-      return (obj.item === itemObj.item && obj.size === itemObj.size && obj.date == pThis.cur_sel_date);
+    let q = 0;
+    let cartObj = this.getCartWithDate(date);
+    let myIndex = cartObj.findIndex(function (obj) {
+      return (obj.item === itemObj.item && obj.size === itemObj.size);
     });
     if (myIndex > -1) {
-      q = this.cart_items[myIndex].quant;
+      q = cartObj[myIndex].quant;
     }
     return Math.round(q);
   }
 
-  cartQuantityForThaliItem(itemObj, subItem) {
-    let pThis = this;
-    let q: number;
-    q = 0;
-    let myIndex = this.cart_items.findIndex(function (obj) {
-      return (obj.item === itemObj.item && obj.size === itemObj.size && obj.date == pThis.cur_sel_date && obj.sub_item == itemObj.sub_item);
-    });
-
-    if (myIndex > -1) {
-      
-    }
-  }
 
   compareObj(a, b) {
     if (a.item < b.item)
@@ -631,20 +644,158 @@ export class AppProvider {
     }
   }
 
-  confirmThali(item, item_name, price, discount, discount_per, quant, size, type, p_veg, ps_type, ps_size_id, ps_quant, ps_unit, subObj) {
+  confirmThali(item, item_name, price, discount, discount_per, quant, size, type, p_veg, ps_type, ps_size_id, ps_quant, ps_unit, subObj, date?) {
     let pThis = this;
     subObj.sort();
-    let myIndex = this.cart_items.findIndex(function (obj) {
-      return (obj.item === item && obj.size === size && obj.date == pThis.cur_sel_date && pThis.sameObj(obj.sub_item, subObj));
+    if (!date) {
+      date = this.cur_sel_date;
+    }
+    let cIndex = this.cart_items.findIndex(function (obj) {
+      return (obj.date === date );
     });
+    if (cIndex >= 0) {
+      let myIndex = this.cart_items[cIndex].data.findIndex(function (obj) {
+        return (obj.item === item && obj.size === size && pThis.sameObj(obj.sub_item, subObj));
+      });
 
+      if (myIndex >= 0) {
+        this.cart_items[cIndex].data[myIndex].quant++;
+      }
+      else {
+        this.cart_items[cIndex].data.push({
 
-    if (myIndex >= 0) {
-
-      this.cart_items[myIndex].quant++;
+          item: item,
+          item_name: item_name,
+          price: price,
+          discount: discount,
+          discount_per: discount_per,
+          size: size,
+          quant: quant,
+          date: date,
+          type: type,
+          p_veg: p_veg,
+          ps_type: ps_type,
+          ps_size_id: ps_size_id,
+          ps_quant: ps_quant,
+          ps_unit: ps_unit,
+          sub_item: subObj
+        });
+      }
     }
     else {
+      let cartData: Array<{ item: number, item_name: string, price: number, discount: number, discount_per: number, size: string, quant: number, date: number, type: string, p_veg: boolean, ps_type: string, ps_size_id: number, ps_quant: number, ps_unit: string, sub_item: Array<{ item: number, item_name: string, price: number, discount: number, discount_per, number, size: string, quant: number, type: string, p_veg: boolean, ps_type: string, ps_size_id: number, ps_quant: number, ps_unit: string }> }>;
+      cartData = [];
+      cartData.push({
+        item: item,
+        item_name: item_name,
+        price: price,
+        discount: discount,
+        discount_per: discount_per,
+        size: size,
+        quant: quant,
+        date: date,
+        type: type,
+        p_veg: p_veg,
+        ps_type: ps_type,
+        ps_size_id: ps_size_id,
+        ps_quant: ps_quant,
+        ps_unit: ps_unit,
+        sub_item: subObj});
       this.cart_items.push({
+        date: date,
+        data: cartData
+      });
+
+    }
+    
+ 
+    localStorage.setItem("cart", JSON.stringify(this.cart_items));
+
+  }
+
+  cartPrice(date?) {
+    let p: number;
+    p = 0;
+    for (let x of this.getCartWithDate(date)) {
+      p += (x.price + x.discount) * x.quant;
+    }
+    return Math.round(p);
+  }
+  cartPriceAfterDiscount(date?) {
+    let p: number;
+    p = 0;
+    for (let x of this.getCartWithDate(date)) {
+      p += x.price  * x.quant;
+    }
+    return Math.round(p);
+  }
+  discountOnCart(date?) {
+    let p: number;
+    p = 0;
+    for (let x of this.getCartWithDate(date)) {
+      p += x.discount * x.quant;
+    }
+    return Math.round(p);
+  }
+
+  taxOnCart(date?) {
+    return Math.round(this.cartPriceAfterDiscount(date) * this.tax_per);
+  }
+  delieveryChargeOnCart() {
+    return Math.round(this.deliver_ch);
+  }
+
+  cartPriceTotal(date?) {
+    return (this.cartPriceAfterDiscount(date) + this.taxOnCart(date) + this.delieveryChargeOnCart()) ;
+  }
+   
+   
+  addToCart(item, item_name, price, discount, discount_per, quant, size, type, p_veg, ps_type, ps_size_id, ps_quant, ps_unit, sub_item, date?) {
+    if (!Array.isArray(sub_item)) {
+      sub_item = [];
+    }
+
+    let pThis = this;
+    if (!date) {
+      date = this.cur_sel_date;
+    }
+    let cIndex = this.cart_items.findIndex(function (obj) {
+      return (obj.date === date);
+    });
+    if (cIndex >= 0) {
+      let myIndex = this.cart_items[cIndex].data.findIndex(function (obj) {
+        return (obj.item === item && obj.size === size && pThis.sameObj(obj.sub_item, sub_item));
+      });
+
+      if (myIndex >= 0) {
+        this.cart_items[cIndex].data[myIndex].quant++;
+      }
+      else {
+        this.cart_items[cIndex].data.push({
+          item: item,
+          item_name: item_name,
+          price: price,
+          discount: discount,
+          discount_per: discount_per,
+          size: size,
+          quant: quant,
+          date: this.cur_sel_date,
+          type: type,
+          p_veg: p_veg,
+          ps_type: ps_type,
+          ps_size_id: ps_size_id,
+          ps_quant: ps_quant,
+          ps_unit: ps_unit,
+          sub_item: sub_item
+        });
+      }
+
+    }
+    else {
+      let cartData: Array<{ item: number, item_name: string, price: number, discount: number, discount_per: number, size: string, quant: number, date: number, type: string, p_veg: boolean, ps_type: string, ps_size_id: number, ps_quant: number, ps_unit: string, sub_item: Array<{ item: number, item_name: string, price: number, discount: number, discount_per, number, size: string, quant: number, type: string, p_veg: boolean, ps_type: string, ps_size_id: number, ps_quant: number, ps_unit: string }> }>;
+      cartData = [];
+
+      cartData.push({
         item: item,
         item_name: item_name,
         price: price,
@@ -659,100 +810,43 @@ export class AppProvider {
         ps_size_id: ps_size_id,
         ps_quant: ps_quant,
         ps_unit: ps_unit,
-        sub_item: subObj
+        sub_item: sub_item
+      });
+      this.cart_items.push({
+        date: date,
+        data: cartData
       });
     }
-    localStorage.setItem("cart", JSON.stringify(this.cart_items));
-
-  }
-
-  cartPrice() {
-    let p: number;
-    p = 0;
-    for (let x of this.getCartWithDate()) {
-      p += (x.price + x.discount) * x.quant;
-    }
-    return Math.round(p);
-  }
-  cartPriceAfterDiscount() {
-    let p: number;
-    p = 0;
-    for (let x of this.getCartWithDate()) {
-      p += x.price  * x.quant;
-    }
-    return Math.round(p);
-  }
-  discountOnCart() {
-    let p: number;
-    p = 0;
-    for (let x of this.getCartWithDate()) {
-      p += x.discount * x.quant;
-    }
-    return Math.round(p);
-  }
-
-  taxOnCart() {
-    return Math.round(this.cartPriceAfterDiscount() * this.tax_per);
-  }
-  delieveryChargeOnCart() {
-    return Math.round(this.deliver_ch);
-  }
-
-  cartPriceTotal() {
-    return (this.cartPriceAfterDiscount() + this.taxOnCart() + this.delieveryChargeOnCart()) ;
-  }
-   
-   
-  addToCart(item, item_name, price, discount, discount_per, quant, size, type, p_veg, ps_type, ps_size_id, ps_quant, ps_unit, sub_item) {
-    if (!Array.isArray(sub_item)) {
-      sub_item = [];
-    }
-
-     let pThis = this;
-    let myIndex =   this.cart_items.findIndex(function(obj) {
-      return (obj.item === item && obj.size === size && obj.date == pThis.cur_sel_date && pThis.sameObj(obj.sub_item, sub_item));
-       });
-  
-        if(myIndex>= 0){        
-            this.cart_items[myIndex].quant++;
-        }
-        else{
-          this.cart_items.push({
-            item: item,
-            item_name: item_name,
-            price: price,
-            discount: discount,
-            discount_per: discount_per,
-            size: size,
-            quant: quant,
-            date: this.cur_sel_date,
-            type: type,
-            p_veg: p_veg,
-            ps_type: ps_type,
-            ps_size_id: ps_size_id,
-            ps_quant: ps_quant,
-            ps_unit: ps_unit,
-            sub_item: sub_item
-            });
-        }
+ 
      localStorage.setItem("cart", JSON.stringify(this.cart_items));
    }
 
-  removeFromCart(item, size) {
+  removeFromCart(item, size, date?) {
     let pThis = this;
-    let index = this.cart_items.findIndex(function (obj) {
-      return (obj.item == item && obj.size == size && obj.date === pThis.cur_sel_date);
+    let cartObj = this.getCartWithDate(date);
+    if (!date) {
+      date = this.cur_sel_date;
+    }
+    let cIndex = this.cart_items.findIndex(function (obj) {
+      return (obj.date === date);
     });
+    if (cIndex >= 0) {
+      let index = this.cart_items[cIndex].data.findIndex(function (obj) {
+        return (obj.item == item && obj.size == size);
+      });
 
-    if (index >= 0) {
-      if (this.cart_items[index].quant > 1) {
-        this.cart_items[index].quant--;
+      if (index >= 0) {
+        if (this.cart_items[cIndex].data[index].quant > 1) {
+          this.cart_items[cIndex].data[index].quant--;
+        }
+        else {
+          this.cart_items[cIndex].data.splice(index, 1);
+          if (this.cart_items[cIndex].data.length <= 0) {
+            this.cart_items.splice(cIndex, 1);
+          }
+        }
+        localStorage.setItem("cart", JSON.stringify(this.cart_items));
       }
-      else {
-        this.cart_items.splice(index, 1);
-      }
-    
-      localStorage.setItem("cart", JSON.stringify(this.cart_items));
     }
   }
 

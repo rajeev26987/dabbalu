@@ -1,0 +1,106 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Cart
+      <span class="toggle-all-icon" ><ion-icon name="arrow-dropdown-circle" (click)="showAllDate()"></ion-icon></span>
+      <span class="toggle-all-icon" ><ion-icon name="arrow-dropup-circle" (click)="hideAllDate()"></ion-icon></span>
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content  class="cart-page-style">
+  <div *ngIf="cartLength()>0">
+    <div *ngFor="let dt of getCart()">
+      <div *ngIf="CartLengthForDate(dt.date) > 0" class="cart-item-style">
+
+        <div class="cart-item-card">
+          <div class="my-date-style" (click)="toggleDate(dt.date)">
+            {{showDateStr(dt.date)}}
+            <span [hidden]="!showForDate(dt.date)" class="my-date-drop-icon"><ion-icon name="arrow-dropdown"></ion-icon></span>
+            <span [hidden]="showForDate(dt.date)" class="my-date-drop-icon"><ion-icon name="arrow-dropup"></ion-icon></span>
+          </div>
+          <div class="cart-item-div" [hidden]="showForDate(dt.date)">
+          <div><b>Items in cart</b></div>
+          <div class="cart-item">
+            <ion-grid>
+              <ion-row *ngFor="let citem of getCartWithDate(dt.date)">
+                <ion-col col-5 class="cart-description">
+                  <div><ion-icon [class.item-non-veg]="citem.p_veg==0" [class.item-veg]="citem.p_veg==1" ios="ios-radio-button-on" md="md-radio-button-on"></ion-icon> {{citem.item_name }}</div>
+                  <div [hidden]="citem.size ==''">({{citem.size }})</div>
+                  <div [hidden]="citem.sub_item.length == 0">
+                    <div class="sub-item" *ngFor="let sitem of citem.sub_item">
+                      {{sitem.item_name}} <span [hidden]="sitem.size ==''"> ({{sitem.size }})</span> x{{sitem.quant}}
+                    </div>
+                  </div>
+                </ion-col>
+                <ion-col col-4 align-self-center>
+                  <button ion-button outline small class="add-remove-cart-button"><p class="remove-from-cart" (click)="removeFromCart(citem.item,citem.size, dt.date)">-</p> <p class="cart-quant">{{citem.quant}}</p> <p class="add-to-cart" (click)="addToCart(citem, dt.date)">+</p></button>
+                </ion-col>
+                <ion-col col-3 align-self-center class="cart-price">
+                  <span [hidden]="citem.discount<=0" class="before-discount-price">&#x20b9;{{(citem.price + citem.discount) * citem.quant }}</span>
+                  <span>&#x20b9;{{citem.price * citem.quant}}</span>
+
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+          <div class="cart-bill-card">
+            <b>Bill Summary</b>
+            <ion-grid>
+              <ion-row>
+                <ion-col class="cart-description">
+                  Item total
+                </ion-col>
+                <ion-col class="cart-price">
+                  &#x20b9;{{cartPrice(dt.date)}}
+                </ion-col>
+
+              </ion-row>
+              <ion-row [hidden]="discountOnCart()<=0">
+                <ion-col class="cart-description">
+                  Discount
+                </ion-col>
+                <ion-col class="cart-price">
+                  &#x20b9;{{discountOnCart(dt.date)}}
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col class="cart-description">
+                  Tax
+                </ion-col>
+                <ion-col class="cart-price">
+                  &#x20b9;{{taxOnCart(dt.date)}}
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col class="cart-description">
+                  Delivery Charges
+                </ion-col>
+                <ion-col class="cart-price">
+                  &#x20b9;{{delieveryChargeOnCart()}}
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col class="cart-description">
+                  <b>To Pay</b>
+                </ion-col>
+                <ion-col class="cart-price">
+                  <b>&#x20b9;{{cartPriceTotal(dt.date)}}</b>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+          <div>
+            <ion-buttons end>  <button ion-button outline color="secondary" small (click)="createSchedule(dt.date)">Schedule</button></ion-buttons>
+          </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="cart-empty-div" [hidden]="cartLength()>0">
+    <ion-icon name="ios-cart-outline" class="cart-empty-icon"></ion-icon>
+    <div class="cart-empty-content">Cart is empty</div>
+  </div>
+
+</ion-content>

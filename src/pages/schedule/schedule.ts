@@ -9,9 +9,41 @@ import { EditSchedulePage } from '../edit-schedule/edit-schedule';
 })
 export class SchedulePage {
 
-  constructor(public navCtrl: NavController, public modalCtrl: ModalController, public appService: AppProvider) {
+  showDate: Array<number>;
+  showAll: number;
 
+  constructor(public navCtrl: NavController, public modalCtrl: ModalController, public appService: AppProvider) {
+    this.showAll = 0;
+    this.showDate = [];
   }
+
+  toggleDate(date) {
+    let d = Number(date); 
+      let index = this.showDate.indexOf(d);
+      if (index >= 0) {
+        this.showDate.splice(index, 1);
+      }
+      else {
+        this.showDate.push(d);
+      }
+  }
+
+  showAllDate() {
+    this.showAll = 1;
+    this.showDate = [];
+  }
+
+  hideAllDate() {
+    this.showAll = 0;
+    this.showDate = [];
+  }
+
+  showForDate(date) {
+    let d = Number(date);
+    let index = this.showDate.indexOf(d);
+    return (index >= 0 && this.showAll == 1) || (index < 0 && this.showAll == 0);
+  }
+
   getScheduleItemsForDate(date) {
     return this.appService.getScheduleItemsForDate(date);
   }
@@ -22,6 +54,14 @@ export class SchedulePage {
     return this.appService.getAllScheduleItemsLength();
   }
   groupScheduledItems() {
+    let schItem = this.appService.groupScheduledItems();
+    if (Array.isArray(schItem) ) {
+      schItem.sort(this.compareObj);
+    }
+    else {
+      return schItem;
+    }
+
     return this.appService.groupScheduledItems();
   }
   groupScheduledItemsLength() {
@@ -65,5 +105,12 @@ export class SchedulePage {
   }
   showDateStr(date) {
     return this.appService.showDateStr(date);
+  }
+  compareObj(a, b) {
+    if (a.date < b.date)
+      return -1;
+    if (a.date > b.date)
+      return 1;
+    return 0;
   }
 }
