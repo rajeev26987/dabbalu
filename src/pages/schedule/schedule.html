@@ -17,8 +17,8 @@
         <div class="cart-item-card" >
           <div class="my-date-style" (click)="toggleDate(dt.date)">
             {{showDateStr(dt.date)}}
-            <span [hidden]="!showForDate(dt.date)" class="my-date-drop-icon"><ion-icon name="arrow-dropdown"></ion-icon></span>
-            <span [hidden]="showForDate(dt.date)" class="my-date-drop-icon" ><ion-icon name="arrow-dropup"></ion-icon></span>
+            <span [hidden]="!showForDate(dt.date)" class="my-date-drop-icon"><ion-icon name="ios-arrow-down"></ion-icon></span>
+            <span [hidden]="showForDate(dt.date)" class="my-date-drop-icon" ><ion-icon name="ios-arrow-up"></ion-icon></span>
           </div>
           <div class="schedule-item-div" [hidden]="showForDate(dt.date)">
           <div><b>Scheduled Items</b></div>
