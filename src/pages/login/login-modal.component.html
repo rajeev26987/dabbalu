@@ -1,0 +1,16 @@
+<ion-content>
+    <ion-item>
+        <ion-label stacked>Phone Number</ion-label>
+        <ion-input type="number" [(ngModel)]="phoneNumber"></ion-input>
+    </ion-item>
+    <ion-item *ngIf="codeSent">
+        <ion-label stacked>SMS Code</ion-label>
+        <ion-input type="number" [(ngModel)]="smsCode"></ion-input>
+    </ion-item>
+    <button *ngIf="!codeSent" ion-button id="sign-in-button" (click)="signInWithPhone(phoneNumber)">
+        Sign In
+    </button>
+    <button *ngIf="codeSent" ion-button id="sms-code" (click)="completeSignIn(phoneNumber)">
+        Validate Sms Code
+    </button>
+</ion-content>

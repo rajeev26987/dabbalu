@@ -1,14 +1,19 @@
+import { UserModalComponent } from './user-modal.component';
 import  { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, ModalController } from 'ionic-angular';
 
 @Component({
   selector: 'page-account',
   templateUrl: 'account.html'
 })
 export class AccountPage {
-
-  constructor(public navCtrl: NavController) {
-
+  constructor(public navCtrl: NavController, public modalCtrl: ModalController) {
+    
   }
 
+  editProfile(){
+    let modal = this.modalCtrl.create(UserModalComponent, null, { showBackdrop: true, enableBackdropDismiss: true, cssClass: 'modal-halfscreen'});
+    modal.present(); 
+  } 
+   
 }

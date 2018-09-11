@@ -1,0 +1,53 @@
+<ion-content class="bg-img">
+
+    <div class="main-content">
+      <div padding text-center class="container-logo">
+        <img src="assets/imgs/logo.png">
+      </div>
+      <div text-center class="socialLogin" padding>
+        <button ion-button full class="google" (click)="onLoginClick('google')"><ion-icon name="logo-google" style="margin-right: 12px;"></ion-icon>Sign in with Google</button>
+        <button ion-button full class="facebook" (click)="onLoginClick('facebook')"><ion-icon name="logo-facebook" style="margin-right: 12px;"></ion-icon> Sign in with Facebook</button>
+      </div>
+      <div class="sepretor-or" padding-horizontal>
+          <p>Or</p>
+        </div>
+  
+      <div padding class="container-bottom">
+      <form [formGroup]="authForm" (ngSubmit)="userLogin(loginData)">
+  
+        <div class="errormsg">
+          <div *ngIf="email.errors && email.touched">
+              <p>Email is required.</p>
+          </div>
+          <div *ngIf="password.errors && password.touched">
+              <p>Password is required.</p>
+          </div>
+        </div>
+  
+          <ion-list>
+            <ion-item padding-right>
+              <ion-label>
+                <ion-icon ios="ios-mail" md="md-mail"></ion-icon>
+              </ion-label>
+              <ion-input [(ngModel)]="loginData.email" [formControl]="email" id="email" type="text" required placeholder="Email *"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label>
+                <ion-icon ios="ios-unlock" md="md-unlock"></ion-icon>
+              </ion-label>
+                <ion-input [(ngModel)]="loginData.password" [formControl]="password" id="password" type="{{passwordtype}}" required placeholder="Password *"></ion-input>
+              <button ion-button clear class="eye-icon-btn" type="button" item-right (click)="managePassword()"><ion-icon name="{{passeye}}"></ion-icon></button>
+            </ion-item>
+          </ion-list>
+          <button type="submit" ion-button full color="dark" [disabled]="!authForm.valid">Sign In</button>
+      </form>
+      <div padding text-center class="form-bottom-text" ><a href="javascript:void(0);" (click)="forgotPassword()"> Forgot password?</a></div>
+          <div padding text-center class="form-bottom-text">
+            <label>Don't have an Account? <a href="javascript:void(0);" (click)="moveToRegister()">Sign up</a></label>
+          </div>
+  
+    </div>
+    </div>
+  
+  </ion-content>
+  

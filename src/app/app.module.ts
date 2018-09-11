@@ -25,6 +25,26 @@ import { SchedulePage } from '../pages/schedule/schedule';
 import { PaymentPage } from '../pages/payment/payment';
 import { CartPage } from '../pages/cart/cart';
 
+import { LoginComponent } from '../pages/login/login.component';
+import { NativeStorage } from '@ionic-native/native-storage';
+import { GooglePlus } from '@ionic-native/google-plus';
+import { AuthProvider } from '../providers/auth/auth';
+import { AngularFireModule } from 'angularfire2';
+import firebase from 'firebase';
+import { LoginModalComponent } from '../pages/login/login-modal.component';
+import { UserModalComponent } from '../pages/account/user-modal.component';
+
+export const firbaseConfig = {
+  apiKey: "AIzaSyBL_ADpVlhSODGbSn6AwXRx7dhobd1ocWk",
+    authDomain: "dabbalu-9947a.firebaseapp.com",
+    databaseURL: "https://dabbalu-9947a.firebaseio.com",
+    projectId: "dabbalu-9947a",
+    storageBucket: "dabbalu-9947a.appspot.com",
+    messagingSenderId: "19063399741"
+}
+
+firebase.initializeApp(firbaseConfig);
+
 @NgModule({
   declarations: [
     MyApp,
@@ -41,12 +61,16 @@ import { CartPage } from '../pages/cart/cart';
     SetThaliQuantPage,
     SelectThaliPage,
     SelThaliMenuPage,
-    EditSchedulePage
+    EditSchedulePage,
+    LoginComponent,
+    LoginModalComponent,
+    UserModalComponent
   ],
   imports: [
     HttpClientModule,
     BrowserModule,
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp),
+    AngularFireModule.initializeApp(firbaseConfig)
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -64,12 +88,18 @@ import { CartPage } from '../pages/cart/cart';
     SetThaliQuantPage,
     SelectThaliPage,
     SelThaliMenuPage,
-    EditSchedulePage
+    EditSchedulePage,
+    LoginComponent,
+    LoginModalComponent,
+    UserModalComponent
   ],
   providers: [
+    NativeStorage,
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
+    GooglePlus,
+    AuthProvider,
     AppProvider,
     ThaliProvider
   ]

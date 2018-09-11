@@ -1,0 +1,111 @@
+dabbalu-login {
+  
+  .bg-img {
+    background-image: url(../../assets/imgs/bg.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+  .socialLogin {
+    float: left;
+    width: 100%;
+    text-align: center;
+  }
+  .facebook{
+    background-color: #3b5998;;
+  }
+  .google{
+    background-color: #d13d35;
+  }
+  .github{
+    background-color: #000000;
+  }
+  .twitter{
+    background-color: #728fdb;
+  }
+  .container-logo {
+    display: inline-block;
+    width: 100%;
+    margin: 20px 0;
+    img {
+      max-width: 50px;
+    }
+  }
+  .main-content {
+    
+    min-height: 100%;
+  }
+  .item-inner{
+    border-bottom: 0px !important;
+  }
+  .list-md, .list-ios {
+    margin:0 !important;
+  }
+  .list {
+    padding:0 !important;
+  }
+  form {
+    .button-md,
+    .button-ios {
+      margin: 0px !important;
+      background-color: black;
+      padding: 26px !important;
+    }
+  }
+  .form-bottom-text {
+    display: inline-block;
+    width: 100%;
+  }
+  .form-bottom-text label,
+  a {
+    color: black;
+  }
+  // a[disabled],
+  // button[disabled],
+  // [ion-button][disabled] {
+  //   opacity: 0.8 !important;
+  // }
+  .errormsg p {
+    background-color: rgba(255,0,0,.3);
+    color: black;
+    border: 1px solid #FF0000;
+    padding: 5px;
+  }
+  .sepretor-or {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+  }
+  .sepretor-or p {
+    color: black  ;
+    font-size: 16px;
+    text-transform: lowercase;
+  }
+  .sepretor-or p::before,
+  .sepretor-or p::after {
+    width: -webkit-calc(48% - 10px);
+    width: -moz-calc(48% - 10px);
+    width: calc(48% - 10px);
+    display: inline-block;
+    height: 1px;
+    margin-top: 8px;
+    background-image: url('../../assets/imgs/seprator.png');
+    background-repeat: repeat;
+    content: '';
+  }
+
+  .eye-icon-btn{
+    background-color: transparent !important;
+    color: black;
+    font-size: 2.2rem !important;
+    }
+
+  .modal{
+    bottom: 0%;
+    width: 100%;
+    height: 500px;
+    position: absolute;
+  }
+}
+
+

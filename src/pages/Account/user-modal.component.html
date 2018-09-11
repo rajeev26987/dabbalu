@@ -1,0 +1,33 @@
+<ion-header>
+
+    <ion-navbar>
+      <ion-title>
+        Edit Profile
+      </ion-title>
+      <ion-buttons end>  
+        <button ion-button small (click)="dismiss()">
+          <ion-icon name="close" (click)="dismiss()"></ion-icon>
+        </button>
+      </ion-buttons>
+    </ion-navbar>
+  
+  </ion-header>
+  <ion-content>
+  <ion-list>
+    <ion-item>
+        <ion-label color="primary" stacked>Name</ion-label>
+        <ion-input type="email" placeholder="Your Full Name"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label color="primary" stacked>Email</ion-label>
+        <ion-input type="email" placeholder="Your Email ID"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label color="primary" stacked>Mobile Number</ion-label>
+        <ion-input type="email" placeholder="Mobile Number"></ion-input>
+      </ion-item>
+</ion-list>
+<ion-buttons>
+  <button ion-button>Save</button>
+</ion-buttons>
+</ion-content>
