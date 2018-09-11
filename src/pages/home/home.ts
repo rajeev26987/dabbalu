@@ -4,6 +4,7 @@ import { AppProvider } from '../../providers/app/app';
 import { Services } from '@angular/core/src/view';
 import { SetQuantPage } from '../set-quant/set-quant';
 import { SelectThaliPage } from '../select-thali/select-thali';
+import { EditSchedulePage } from '../edit-schedule/edit-schedule';
 
 @Component({
   selector: 'page-home',
@@ -26,8 +27,8 @@ export class HomePage{
   menuInitialized() {
     return this.appService.menuInitialized();
   }
-  CartLengthForDate() {
-    return this.appService.CartLengthForDate();
+  CartLengthForDate(date?) {
+    return this.appService.CartLengthForDate(date);
   }
 
   getMenuItem(day) {
@@ -63,6 +64,9 @@ export class HomePage{
   cartPrice() {
     return this.appService.cartPrice();
   }
+  discountOnCart() {
+    return this.appService.discountOnCart();
+  }
 
   taxOnCart() {
     return this.appService.taxOnCart();
@@ -75,9 +79,23 @@ export class HomePage{
     return this.appService.cartPriceTotal();
   }
 
-   addToCart(item,price,quant,size, type){
+  addToCart(itemObj) {
+    let item = itemObj.item,
+      item_name = itemObj.item_name,
+      price = itemObj.price,
+      discount = itemObj.discount,
+      discount_per = itemObj.discount_per,
+      quant = 1,
+      size = itemObj.size,
+      type = itemObj.type,
+      p_veg = itemObj.p_veg,
+      ps_type = itemObj.ps_type,
+      ps_size_id = itemObj.ps_size_id,
+      ps_quant = itemObj.ps_quant,
+      ps_unit = itemObj.ps_unit,
+      sub_item = itemObj.sub_item;
 
-     this.appService.addToCart(item, price, quant, size, type);
+    this.appService.addToCart(item, item_name, price, discount, discount_per, quant, size, type, p_veg, ps_type, ps_size_id, ps_quant, ps_unit, sub_item);
    }
 
    removeFromCart(item, size){
@@ -88,53 +106,75 @@ export class HomePage{
     return this.appService.cartQuantityForItem(item);
   }
 
-  openSetQuantModal(item,price, type) {
-    let modal = this.modalCtrl.create(SetQuantPage, { item: item, price: price, thali: false, type:type, itemObj:""}, { showBackdrop: true, enableBackdropDismiss: true });
+  getScheduleItemsForDate(date?) {
+    return this.appService.getScheduleItemsForDate(date);
+  }
+  getScheduleItemsLenForDate(date?) {
+    return this.appService.getScheduleItemsLenForDate(date);
+  }
+  groupScheduledItemsForDate(date?) {
+    return this.appService.groupScheduledItemsForDate(date);
+  }
+
+  scheduledItemPrice() {
+    return this.appService.scheduledItemPrice();
+  }
+  scheduledItemPriceAfterDiscount() {
+    return this.appService.scheduledItemPriceAfterDiscount();
+  }
+  discountOnScheduledItem() {
+    return this.appService.discountOnScheduledItem();
+  }
+
+  taxOnScheduledItem() {
+    return this.appService.taxOnScheduledItem();
+  }
+  delieveryChargeOnScheduledItem() {
+    return this.appService.delieveryChargeOnScheduledItem();
+  }
+
+  scheduledItemPriceTotal() {
+    return this.appService.scheduledItemPriceTotal();
+  }
+
+
+  getPriceBeforeDiscount(price, discount, quant) {
+    return (Number(price) + Number(discount)) * Number(quant);
+  }
+
+  showDateStr() {
+    return this.appService.showDateStr();
+  }
+  createSchedule(date?) {
+    return this.appService.createSchedule(date);
+  }
+
+  openSetQuantModal(itemAll) {
+    let item = itemAll.item,
+      item_name = itemAll.item_name,
+      price = itemAll.price,
+      type = itemAll.type,
+      ps_type = itemAll.ps_type,
+      ps_type_val = itemAll.ps_type_val,
+      p_veg = itemAll.p_veg;
+    let modal = this.modalCtrl.create(SetQuantPage, {itemAll:itemAll, item: item, item_name: item_name, price: price, p_veg: p_veg, thali: false, type:type, ps_type: ps_type, ps_type_val: ps_type_val, itemObj:""}, { showBackdrop: true, enableBackdropDismiss: true });
     modal.present();
   }
 
   openSetThaliModal(size, for_date) {
-    console.log("opening thali model");
+
     let modal = this.modalCtrl.create(SelectThaliPage, { size: size, for_date: for_date }, { showBackdrop: true, enableBackdropDismiss: true });
     modal.present();
   }
 
- 
-    selectQuantity(item,price,quant,size, type) {
-        let alert = this.alertCtrl.create({
-            title: 'Quantity',
-            inputs : [
-                {
-                    type:'radio',
-                    label:'Small '+ "₹" +price,
-                    value: "small",
-                    checked: size == "small"
-                },
-                {
-                    type:'radio',
-                    label:'Medium '+ "₹" +Math.round(price * 1.2 ),
-                    value:'medium',
-                    checked: size == "medium"
-                },
-                {
-                    type:'radio',
-                    label:'Large '+ "₹" +Math.round(price * 1.4),
-                    value:'large',
-                    checked: size == "large"
-                }
-            ],
-            buttons: [
-                {
-                text: 'Add',
 
-                    handler: data => {
-                        this.addToCart(item,price,quant,data, type);
-                        console.log('Cancel clicked '+data + " "+item + " "+price + " "+quant);
-                    }
+  openEditScheduleModal() {
+    let schObj = this.getScheduleItemsForDate();
+    let for_date = this.get_curr_sel_date();
+    let modal = this.modalCtrl.create(EditSchedulePage, { schObj: schObj, for_date: for_date }, { showBackdrop: true, enableBackdropDismiss: true });
+    modal.present();
+  }
 
-                }]
-        });
-        alert.present();
-    }
+
 
 }

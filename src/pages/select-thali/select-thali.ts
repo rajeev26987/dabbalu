@@ -46,10 +46,13 @@ export class SelectThaliPage {
   dismiss() {
     this.viewCtrl.dismiss();
   }
+  vegInd() {
+   return  this.thaliProvider.vegInd();
+  }
 
   confirmThali() {
     let obj = this.getThali();
-    this.appService.confirmThali("Thali", this.thaliPriceTotal(), 1, this.size, "t", obj);
+    this.appService.confirmThali(100, "Thali", this.thaliPriceTotal(), this.discountOnThali(), this.discountPercent(), 1, this.size, "t", this.vegInd(),"d0",0,0,"", obj);
     this.dismiss();
 
   }
@@ -97,6 +100,9 @@ export class SelectThaliPage {
   discountOnThali() {
     return this.thaliProvider.discountOnThali();
   }
+  discountPercent() {
+    return this.thaliProvider.discountPercent();
+  }
 
   thaliPriceTotal() {
     return this.thaliProvider.thaliPriceTotal();
@@ -107,7 +113,7 @@ export class SelectThaliPage {
   }
 
   cartQuantityForThaliItemType(item) {
-    if (item == 'r') {
+    if (item == 'r' || item == 'b') {
       return this.thaliProvider.cartQuantityForThaliItemType('r') +  this.thaliProvider.cartQuantityForThaliItemType('b');
     }
     else {
@@ -121,9 +127,23 @@ export class SelectThaliPage {
   getThaliListForItemType(type) {
    return this.thaliProvider.getThaliListForItemType(type);
   }
-  addToThali(item, price, quant, size, type, flag?) {
-    if (!this.maxItemReached('a')) {
-      this.thaliProvider.addToThali(item, price, quant, size, type, flag);
+
+  addToThali(itemObj) {
+    let item = itemObj.item,
+      item_name = itemObj.item_name,
+      price = itemObj.price,
+      discount = itemObj.discount,
+      discount_per = itemObj.discount_per,
+      quant = 1,
+      size = itemObj.size,
+      type = itemObj.type,
+      p_veg = itemObj.p_veg,
+      ps_type = itemObj.ps_type,
+      ps_size_id = itemObj.ps_size_id,
+      ps_quant = itemObj.ps_quant,
+      ps_unit = itemObj.ps_unit;
+    if (!this.maxItemReached(itemObj.type)) {
+      this.thaliProvider.addToThali(item, item_name, price, discount, discount_per, quant, size, type, p_veg, ps_type, ps_size_id, ps_quant, ps_unit);
     }
 
   }
@@ -145,7 +165,7 @@ export class SelectThaliPage {
 
   maxItemReached(menu_type) {
     let item_no = 0;
-    if (menu_type == 'r') {
+    if (menu_type == 'r' || menu_type == 'b') {
       item_no = this.roti_no;
     }
     else if (menu_type == 'c') {
@@ -162,11 +182,14 @@ export class SelectThaliPage {
   thaliItemCondition(menu_type) {
     let condition = false;
    
-    if (menu_type == 'r') {
-      condition =  this.cartQuantityForThaliItemType('r') > 0 && this.cartQuantityForThaliItemType('r') <= this.roti_no;
+    if (menu_type == 'r' || menu_type == 'b') {
+      condition = this.cartQuantityForThaliItemType('r') > 0 && this.cartQuantityForThaliItemType('r') <= this.roti_no;
     }
     else if (menu_type == 'c') {
       condition = this.cartQuantityForThaliItemType('c') == this.curry_no;
+    }
+    else if (menu_type == 'a') {
+      condition = this.cartQuantityForThaliItemType('a') <= 2;
     }
     return (condition);
 

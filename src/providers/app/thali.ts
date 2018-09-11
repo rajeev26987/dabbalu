@@ -13,12 +13,26 @@ import { stagger } from '@angular/core/src/animation/dsl';
 @Injectable()
 export class ThaliProvider {
  
-  thali_item: Array<{ item: string, price: number, size: string, quant: number, type: string }>;
+  thali_item: Array<{ item: number, item_name: string, price: number, discount: number, discount_per: number, size: string, quant: number, type: string, p_veg: boolean, ps_type: string, ps_size_id: number, ps_quant: number, ps_unit: string }>;
   discount_per: number;
+  veg_ind: boolean;
 
   constructor(private http: HttpClient) {
     this.discount_per = 0.05;
+    this.veg_ind = true;
 
+  }
+
+  vegInd() {
+     let myIndex = this.thali_item.findIndex(function (obj) {
+      return (obj.p_veg == false);
+    });
+    if (myIndex >=0) {
+      return false;
+    }
+    else {
+      return true;
+    }
   }
 
   clearThaliItem() {
@@ -26,6 +40,7 @@ export class ThaliProvider {
   }
 
   getThali() {
+    
     return this.thali_item;
   }
 
@@ -43,7 +58,9 @@ export class ThaliProvider {
     return this.thali_item.length;
   }
 
-
+  discountPercent() {
+    return 5;
+  }
   discountOnThali() {
     return Math.round( this.discount_per * this.thaliPrice());
   }
@@ -63,24 +80,8 @@ export class ThaliProvider {
    
   }
 
-  addToThali(item, price, quant, size, type, flag?) {
+  addToThali(item, item_name, price, discount, discount_per, quant, size, type, p_veg, ps_type, ps_size_id, ps_quant, ps_unit) {
 
-    if (flag == "i") { }
-    else {
-      if (size == "medium") {
-        price = price * 1.2;
-      }
-      else if (size == 'large') {
-        price = price * 1.4;
-      }
-      else if (size == 'large') {
-        price = price * 1.4;
-      }
-      else if (size == 'pack of 5' || size == 'full') {
-        price = price * 1.5;
-      }
-      price = Math.round(price);
-    }
     let pThis = this;
     let myIndex = this.thali_item.findIndex(function (obj) {
       return (obj.item === item && obj.size === size);
@@ -94,10 +95,18 @@ export class ThaliProvider {
     else {
       this.thali_item.push({
         item: item,
+        item_name: item_name,
         price: price,
+        discount: discount,
+        discount_per: discount_per,
         size: size,
         quant: quant,
-        type: type
+        type: type,
+        p_veg: p_veg,
+        ps_type: ps_type,
+        ps_size_id: ps_size_id,
+        ps_quant: ps_quant,
+        ps_unit: ps_unit
       });
     }
 

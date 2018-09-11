@@ -1,0 +1,82 @@
+page-schedule {
+  .cart-item-card {
+    border-bottom: 2px solid lightgrey
+  }
+
+  .toggle-all-icon {
+    float:right;
+    padding-left:10px;
+    color:gray;
+  }
+
+  .cart-description {
+    font-size: 1.0em;
+    width: 100%;
+    text-align: left;
+  }
+
+  .cart-price {
+    font-size: 1.0em;
+    width: 100%;
+    padding-left: 5%;
+    text-align: right;
+  }
+
+  .schedule-item-div {
+    padding: 15px;
+  }
+
+  .my-date-style {
+    color: orangered;
+    padding: 15px;
+    padding-bottom: 20px !important;
+    font-size: 150%;
+    padding-bottom: 10px;
+    border-bottom: 2px solid lightgrey
+  }
+
+  .my-date-drop-icon {
+    float: right;
+    padding-right: 10px;
+    color: gray
+  }
+
+  .cart-item {
+    padding-bottom: 10px;
+  }
+
+  .sub-item {
+    font-size: 80%;
+    color: #828080
+  }
+
+  .item-veg {
+    color: green;
+  }
+
+  .item-non-veg {
+    color: red;
+  }
+
+  .before-discount-price {
+    color: #828080;
+    text-decoration: line-through;
+    padding-right: 5px;
+  }
+
+  .schedule-empty-div {
+    padding: 30px;
+    text-align: center;
+  }
+
+  .schedule-empty-icon {
+    font-size: 150px;
+    color: gray
+  }
+
+  .schedule-empty-content {
+    padding-top: 10px;
+    color: gray;
+    font-size: 20px;
+  }
+}

@@ -1,0 +1,51 @@
+page-edit-schedule {
+  .item-veg {
+    color: green;
+  }
+
+  .item-non-veg {
+    color: red;
+  }
+
+  .my-date-style {
+    color: orangered;
+    font-size: 150%;
+    padding-bottom: 10px;
+  }
+
+  .sub-item {
+    font-size: 80%;
+    color: #d0caca
+  }
+
+  .cart-price {
+    font-size: 1.0em;
+    width: 100%;
+    padding-left: 5%;
+    text-align: right;
+  }
+
+  .no-items {
+    padding: 20px;
+  }
+
+  .before-discount-price {
+    color: #828080;
+    text-decoration: line-through;
+    padding-right: 5px;
+  }
+
+  .schedule-item-div {
+    padding: 15px;
+  }
+
+  .deleted-schedule-div {
+    padding: 15px;
+    border-top: 5px solid lightgrey
+  }
+
+  .no-more-item {
+    padding: 30px;
+    text-align: center;
+  }
+}

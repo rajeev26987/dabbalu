@@ -12,6 +12,14 @@ page-home {
       }
     }
 
+    .cart-item-style {
+      background-color: #faf2f9
+    }
+
+    .schedule-item-style {
+      background-color: #e9effa
+    }
+
     .cart-item-card {
       padding: 5%;
       border-bottom: solid;
@@ -23,6 +31,12 @@ page-home {
       width: 100%;
       padding-left: 5%;
       text-align: right;
+    }
+
+    .before-discount-price {
+      color: #828080;
+      text-decoration: line-through;
+      padding-right: 5px;
     }
 
     .cart-description {
@@ -119,11 +133,11 @@ page-home {
 
   .select-date-block {
     height: 70px;
-    margin-top: 5px;
+    z-index: 100;
   }
 
   .date-day-block {
-    padding: 10px;
+    padding-top: 10px;
     min-width: 70px;
     text-align: center
   }
@@ -146,8 +160,54 @@ page-home {
     border-bottom-color: lawngreen;
   }
 
-  .sub-item{
+  .sub-item {
     font-size: 80%;
-    color:#d0caca
+    color: #828080
+  }
+
+  .my-date-style {
+    color: orangered;
+    font-size: 150%;
+    padding-bottom: 10px;
+  }
+
+  .cart-item {
+    padding-bottom: 10px;
+  }
+
+  .cart-bill-card {
+    padding-bottom: 10px;
+  }
+
+  .item-veg {
+    color: green;
+  }
+
+  .item-non-veg {
+    color: red;
+  }
+
+
+  .circle {
+    height: 5px;
+    width: 5px;
+    background-color: #e954d4 !important;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  .circle-confirm {
+    height: 5px;
+    width: 5px;
+    background-color: #95b2ed;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  .no-circle {
+    height: 5px;
+    width: 5px;
+    border-radius: 50%;
+    display: inline-block;
   }
 }

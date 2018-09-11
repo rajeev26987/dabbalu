@@ -20,8 +20,23 @@ export class ContactPage{
     return this.appService.getCart();
   }
 
-  addToCart(item, price, quant, size, type, flag) {
-    return this.appService.addToCart(item, price, quant, size, type, flag)
+  addToCart(itemObj) {
+    let item = itemObj.item,
+      item_name = itemObj.item_name,
+      price = itemObj.price,
+      discount = itemObj.discount,
+      discount_per = itemObj.discount_per,
+      quant = 1,
+      size = itemObj.size,
+      type = itemObj.type,
+      p_veg = itemObj.p_veg,
+      ps_type= itemObj.ps_type,
+      ps_size_id = itemObj.ps_size_id,
+      ps_quant = itemObj.ps_quant,
+      ps_unit = itemObj.ps_unit,
+      sub_item = itemObj.sub_item;
+
+    this.appService.addToCart(item, item_name, price, discount, discount_per, quant, size, type, p_veg, ps_type, ps_size_id, ps_quant, ps_unit, sub_item);
   }
 
   removeFromCart(item, size) {

@@ -1,0 +1,106 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Schedule
+      <span class="toggle-all-icon" ><ion-icon name="arrow-dropdown-circle" (click)="showAllDate()"></ion-icon></span>
+      <span class="toggle-all-icon"  ><ion-icon name="arrow-dropup-circle" (click)="hideAllDate()"></ion-icon></span>
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content >
+  <div *ngIf="groupScheduledItemsLength()>0">
+    <div *ngFor="let dt of groupScheduledItems()">
+
+      <div  class="schedule-item-style">
+
+        <div class="cart-item-card" >
+          <div class="my-date-style" (click)="toggleDate(dt.date)">
+            {{showDateStr(dt.date)}}
+            <span [hidden]="!showForDate(dt.date)" class="my-date-drop-icon"><ion-icon name="arrow-dropdown"></ion-icon></span>
+            <span [hidden]="showForDate(dt.date)" class="my-date-drop-icon" ><ion-icon name="arrow-dropup"></ion-icon></span>
+          </div>
+          <div class="schedule-item-div" [hidden]="showForDate(dt.date)">
+          <div><b>Scheduled Items</b></div>
+          
+          <div class="cart-item">
+            <ion-grid>
+              <ion-row *ngFor="let citem of dt.data">
+                <ion-col col-8 class="cart-description">
+                  <div><ion-icon [class.item-non-veg]="citem.p_veg==0" [class.item-veg]="citem.p_veg==1" ios="ios-radio-button-on" md="md-radio-button-on"></ion-icon> {{citem.item_name }} <span [hidden]="citem.size ==''">({{citem.size }})</span> x{{citem.quant}}</div>
+
+                  <div [hidden]="citem.sub_item.length == 0">
+                    <div class="sub-item" *ngFor="let sitem of citem.sub_item">
+                      {{sitem.item_name}} <span [hidden]="sitem.size ==''"> ({{sitem.size }})</span> x{{sitem.quant}}
+                    </div>
+                  </div>
+                </ion-col>
+                <ion-col col-4 align-self-center class="cart-price">
+                  <span [hidden]="citem.discount<=0" class="before-discount-price">&#x20b9;{{priceBeforeDiscount(citem.price, citem.discount) }}</span>
+                  <span>&#x20b9;{{citem.price }}</span>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+          <div class="cart-bill-card">
+            <b>Bill Summary</b>
+            <ion-grid>
+              <ion-row>
+                <ion-col class="cart-description">
+                  Item total
+                </ion-col>
+                <ion-col class="cart-price">
+                  &#x20b9;{{scheduledItemPrice(dt.date)}}
+                </ion-col>
+
+              </ion-row>
+              <ion-row [hidden]="discountOnScheduledItem(dt.date_obj)<=0">
+                <ion-col class="cart-description">
+                  Discount
+                </ion-col>
+                <ion-col class="cart-price">
+                  &#x20b9;{{discountOnScheduledItem(dt.date)}}
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col class="cart-description">
+                  Tax
+                </ion-col>
+                <ion-col class="cart-price">
+                  &#x20b9;{{taxOnScheduledItem(dt.date)}}
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col class="cart-description">
+                  Delivery Charges
+                </ion-col>
+                <ion-col class="cart-price">
+                  &#x20b9;{{delieveryChargeOnScheduledItem(dt.date)}}
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col class="cart-description">
+                  <b>To Pay</b>
+                </ion-col>
+                <ion-col class="cart-price">
+                  <b>&#x20b9;{{scheduledItemPriceTotal(dt.date)}}</b>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+          <div>
+            <ion-buttons end>  <button ion-button outline color="secondary" small (click)="openEditScheduleModal(dt.date)">Update</button></ion-buttons>
+          </div>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+  <div class="schedule-empty-div" *ngIf="groupScheduledItemsLength()<=0">
+    <ion-icon name="ios-alarm-outline" class="schedule-empty-icon"></ion-icon>
+    <div class="schedule-empty-content">Scheduled items will appear here</div>
+  </div>
+
+</ion-content>
