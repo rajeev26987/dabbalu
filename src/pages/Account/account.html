@@ -13,25 +13,28 @@
 
 <ion-list>
   <ion-item>
-    <ion-icon name="card" item-start></ion-icon>
-    
+    <ion-icon name="card" item-start></ion-icon>    
       My Addresses
-      <ion-icon name="arrow-dropright-circle" item-end></ion-icon>
+      <ion-icon name="arrow-forward" item-end (click)="redirectToAddress()"></ion-icon>
   </ion-item>
   <ion-item>
     <ion-icon name="clipboard" item-start></ion-icon>
     My Orders
+    <ion-icon name="arrow-forward" item-end (click)="redirectToOrders()"></ion-icon>
   </ion-item>
   <ion-item>
     <ion-icon name="cash" item-start></ion-icon>
     Offers Zone
+    <ion-icon name="arrow-forward" item-end (click)="redirectToOffers()"></ion-icon>
   </ion-item>
   <ion-item>
     <ion-icon name="help-circle" item-start></ion-icon>
     Need Help
+    <ion-icon name="arrow-forward" item-end (click)="redirectToFaq()"></ion-icon>
   </ion-item>
   <ion-item>
     <ion-icon name="leaf" item-start></ion-icon>
     Rate Us
+    <ion-icon name="arrow-forward" item-end (click)="redirectToPlayStore()"></ion-icon>
   </ion-item>
 </ion-list>

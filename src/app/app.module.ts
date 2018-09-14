@@ -33,6 +33,7 @@ import { AngularFireModule } from 'angularfire2';
 import firebase from 'firebase';
 import { LoginModalComponent } from '../pages/login/login-modal.component';
 import { UserModalComponent } from '../pages/account/user-modal.component';
+import { AddressesComponent } from '../pages/account/address/addresses.component';
 
 export const firbaseConfig = {
   apiKey: "AIzaSyBL_ADpVlhSODGbSn6AwXRx7dhobd1ocWk",
@@ -43,7 +44,7 @@ export const firbaseConfig = {
     messagingSenderId: "19063399741"
 }
 
-firebase.initializeApp(firbaseConfig);
+firebase.initializeApp(firbaseConfig); 
 
 @NgModule({
   declarations: [
@@ -64,7 +65,8 @@ firebase.initializeApp(firbaseConfig);
     EditSchedulePage,
     LoginComponent,
     LoginModalComponent,
-    UserModalComponent
+    UserModalComponent,
+    AddressesComponent
   ],
   imports: [
     HttpClientModule,
@@ -91,7 +93,8 @@ firebase.initializeApp(firbaseConfig);
     EditSchedulePage,
     LoginComponent,
     LoginModalComponent,
-    UserModalComponent
+    UserModalComponent,
+    AddressesComponent
   ],
   providers: [
     NativeStorage,
