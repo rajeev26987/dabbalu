@@ -7,10 +7,10 @@ import { NavController, ModalController } from 'ionic-angular';
   selector: 'page-account',
   templateUrl: 'account.html'  
 })
-export class AccountPage {
+export class AccountPage { 
   constructor(public navCtrl: NavController, public modalCtrl: ModalController) {
     
-  }
+  }    
 
   editProfile(){
     let modal = this.modalCtrl.create(UserModalComponent, null, { showBackdrop: true, enableBackdropDismiss: true, cssClass: 'modal-halfscreen'});
@@ -20,9 +20,13 @@ export class AccountPage {
   redirectToAddress(){
     this.navCtrl.push(AddressesComponent);
   }
-
+ 
   editAddress(){
      
+  }
+
+  saveChanges(){
+
   }
    
 }

@@ -1,3 +1,4 @@
+
 import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
@@ -34,6 +35,7 @@ import firebase from 'firebase';
 import { LoginModalComponent } from '../pages/login/login-modal.component';
 import { UserModalComponent } from '../pages/account/user-modal.component';
 import { AddressesComponent } from '../pages/account/address/addresses.component';
+import { AddressFormComponent } from './../pages/Account/address/address-form.component';
 
 export const firbaseConfig = {
   apiKey: "AIzaSyBL_ADpVlhSODGbSn6AwXRx7dhobd1ocWk",
@@ -66,7 +68,8 @@ firebase.initializeApp(firbaseConfig);
     LoginComponent,
     LoginModalComponent,
     UserModalComponent,
-    AddressesComponent
+    AddressesComponent,
+    AddressFormComponent
   ],
   imports: [
     HttpClientModule,
@@ -94,7 +97,8 @@ firebase.initializeApp(firbaseConfig);
     LoginComponent,
     LoginModalComponent,
     UserModalComponent,
-    AddressesComponent
+    AddressesComponent,
+    AddressFormComponent
   ],
   providers: [
     NativeStorage,

@@ -6,6 +6,8 @@ import { Component } from "@angular/core";
 })
 export class AddressesComponent
 {
+    isEditClicked: boolean = false;
+    
     constructor() {
     }
 
@@ -14,6 +16,6 @@ export class AddressesComponent
     }
 
     editAddress(){
-        
+        this.isEditClicked = true;
     }
 }

@@ -2,8 +2,12 @@ page-account {
     .list-md{
         margin: 73px 0 16px;
     }
-
-    
+    .divFont{
+      font-size: 2.2rem;
+    }
+    .logOutCustom{
+      margin-top: 0;
+    }
 }
 
 ion-modal.user-modal ion-backdrop {
@@ -21,4 +25,9 @@ ion-modal.user-modal ion-backdrop {
     width: 100%;
     height: 250px;
     position: absolute;
+  }
+
+  ion-modal ion-content div.scroll-content{
+    overflow-x: unset;
+    overflow-y: unset;
   }
