@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, ModalController } from 'ionic-angular';
+import { NavController, ModalController, AlertController } from 'ionic-angular';
 import { AppProvider } from '../../providers/app/app';
 import { EditSchedulePage } from '../edit-schedule/edit-schedule';
 
@@ -12,9 +12,36 @@ export class SchedulePage {
   showDate: Array<number>;
   showAll: number;
 
-  constructor(public navCtrl: NavController, public modalCtrl: ModalController, public appService: AppProvider) {
+  constructor(public navCtrl: NavController, public modalCtrl: ModalController, public alertCtrl: AlertController, public appService: AppProvider) {
     this.showAll = 0;
     this.showDate = [];
+  }
+
+  confirmDeleteAll() {
+    const confirm = this.alertCtrl.create({
+      title: 'Remove schedule?',
+      message: 'Are you sure you want to remove all items from schedule?',
+      buttons: [
+        {
+          text: 'Disagree',
+          handler: () => {
+            console.log('Disagree clicked');
+          }
+        },
+        {
+          text: 'Agree',
+          handler: () => {
+            this.deleteAll();
+            console.log('Agree clicked');
+          }
+        }
+      ]
+    });
+    confirm.present();
+  }
+
+  deleteAll() {
+    this.appService.deleteAllFromSchedule();
   }
 
   toggleDate(date) {

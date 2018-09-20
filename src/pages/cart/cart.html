@@ -1,7 +1,7 @@
 <ion-header>
   <ion-navbar>
     <ion-title>
-      Cart
+      Cart <span [hidden]="cartLength()<=0" class="remove-all" (click)="confirmDeleteAll()">Remove all</span>
       <span class="toggle-all-icon" ><ion-icon name="arrow-dropdown-circle" (click)="showAllDate()"></ion-icon></span>
       <span class="toggle-all-icon" ><ion-icon name="arrow-dropup-circle" (click)="hideAllDate()"></ion-icon></span>
     </ion-title>

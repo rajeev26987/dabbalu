@@ -20,6 +20,7 @@ export class HomePage{
 
   }
 
+
   iniMenuItem() {
     this.appService.iniMenuItem();
   }

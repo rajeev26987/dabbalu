@@ -215,6 +215,31 @@ export class AppProvider {
     );
 
   }
+
+  deleteAllFromSchedule() {
+    this.loader = this.loadingCtrl.create({
+      content: "Deleting schedule...",
+
+    });
+    this.loader.present();
+    let data = JSON.stringify({user_id: 100});
+
+    this.http.post("http://dabbalu.com/sechedule_delete_all.php", data).subscribe(r => {
+      this.schedule_items = r;
+      this.schedule_init = 1;
+      this.loader.dismiss();
+    },
+      error => {
+        this.loader.dismiss();
+        this.msg = this.toastCtrl.create({
+          message: "Couldn't delete schedule",
+          duration: 3000
+        });
+        this.msg.present();
+      }
+    );
+  }
+
   groupScheduledItemsLength() {
     let itemObj = this.groupScheduledItems();
     if (Array.isArray(itemObj)) {
@@ -528,7 +553,12 @@ export class AppProvider {
       return obj;
     }
   }
- 
+
+  deleteAllFromCart() {
+    this.cart_items = [];
+    localStorage.setItem("cart", JSON.stringify(this.cart_items));
+  }
+
 
  /* getCartWithDate(date?) {
     if (date) {

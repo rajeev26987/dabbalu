@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, AlertController } from 'ionic-angular';
 import { AppProvider } from '../../providers/app/app';
 import { Services } from '@angular/core/src/view';
 @Component({
@@ -9,9 +9,36 @@ import { Services } from '@angular/core/src/view';
 export class CartPage{
   showDate: Array<number>;
   showAll: number;
-  constructor(public navCtrl: NavController, public appService: AppProvider) {
+  constructor(public navCtrl: NavController, public alertCtrl: AlertController, public appService: AppProvider) {
     this.showAll = 0;
     this.showDate = [];
+  }
+
+  confirmDeleteAll() {
+    const confirm = this.alertCtrl.create({
+      title: 'Remove cart?',
+      message: 'Are you sure you want to remove all items from cart?',
+      buttons: [
+        {
+          text: 'Disagree',
+          handler: () => {
+            console.log('Disagree clicked');
+          }
+        },
+        {
+          text: 'Agree',
+          handler: () => {
+            this.deleteAll();
+            console.log('Agree clicked');
+          }
+        }
+      ]
+    });
+    confirm.present();
+  }
+
+  deleteAll() {
+    this.appService.deleteAllFromCart();
   }
 
   toggleDate(date) {

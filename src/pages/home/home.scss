@@ -4,6 +4,12 @@ page-home {
     display: none;
   }
 
+  .sticky {
+    position: fixed;
+    top: 0;
+    width: 100%
+  }
+
 
   .card-background-page {
     .create-thali-card {

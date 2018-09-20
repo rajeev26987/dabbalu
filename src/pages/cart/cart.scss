@@ -3,9 +3,17 @@ page-cart {
     background-color: white;
   }
 
+  .remove-all {
+    color: cornflowerblue;
+    font-weight: 300;
+    font-size: 15px;
+    padding-left: 20px;
+  }
+
   .toggle-all-icon {
     float: right;
     padding-left: 10px;
+    padding-right: 10px;
     color: gray;
   }
 
