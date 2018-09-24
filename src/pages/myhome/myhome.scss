@@ -1,3 +1,40 @@
 page-myhome {
+  ion-scroll[scrollX] {
+    white-space: nowrap;
 
+    .scroll-item {
+      display: inline-block;
+    }
+  }
+
+  .select-option-block {
+    height: 160px;
+  }
+
+  .option-card {
+    position: relative;
+    text-align: center;
+  }
+
+  .option-title {
+    position: absolute;
+    top: 36%;
+    font-size: 1.5em;
+    width: 100%;
+    font-weight: bold;
+    color: #fff;
+  }
+
+  .option-subtitle {
+    font-size: 1.0em;
+    position: absolute;
+    top: 60%;
+    width: 100%;
+    color: #fff;
+  }
+
+  .my-header {
+    background-color: #f3f1f1;
+    padding: 10px;
+  }
 }

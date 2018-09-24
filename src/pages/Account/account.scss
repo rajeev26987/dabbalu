@@ -1,19 +1,30 @@
 page-account {
-    .list-md{
-        margin: 73px 0 16px;
-    }
-    .divFont{
-      font-size: 2.2rem;
-    }
-    .logOutCustom{
-      margin-top: 0;
-    }
+  .list-md {
+    margin: 73px 0 16px;
+  }
+
+  .divFont {
+    font-size: 2.2rem;
+  }
+
+  .logOutCustom {
+    margin-top: 0;
+  }
+
+  
+}
+
+user-modal {
+div.scroll-content {
+    overflow-x: unset;
+    overflow-y: unset;
+  }
 }
 
 ion-modal.user-modal ion-backdrop {
-    visibility: visible !important;
-    z-index: 0;
-  }
+  visibility: visible !important;
+  z-index: 0;
+}
   
   ion-modal.modal-halfscreen ion-backdrop {
     visibility: visible !important;
@@ -27,7 +38,4 @@ ion-modal.user-modal ion-backdrop {
     position: absolute;
   }
 
-  ion-modal ion-content div.scroll-content{
-    overflow-x: unset;
-    overflow-y: unset;
-  }
+

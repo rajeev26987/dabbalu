@@ -1,8 +1,10 @@
+
+::-webkit-scrollbar {
+  display: none;
+}
 page-home {
 
-  ::-webkit-scrollbar {
-    display: none;
-  }
+
 
   .sticky {
     position: fixed;
@@ -10,8 +12,54 @@ page-home {
     width: 100%
   }
 
+  .select-option-block {
+    height: 160px;
+  }
 
-  .card-background-page {
+  .option-card {
+    position: relative;
+    text-align: center;
+  }
+
+  .option-title {
+    position: absolute;
+    top: 36%;
+    font-size: 1.5em;
+    width: 100%;
+    font-weight: bold;
+    color: #fff;
+  }
+
+  .option-subtitle {
+    font-size: 1.0em;
+    position: absolute;
+    top: 60%;
+    width: 100%;
+    color: #fff;
+  }
+
+  ion-scroll[scrollX] {
+    white-space: nowrap;
+
+    .scroll-item {
+      display: inline-block;
+    }
+  }
+
+  .menu-header{
+
+  background-color:#f3f1f1;
+  padding:10px;
+  }
+  .no-padding{
+    padding:0 !important  ;
+  }
+  .no-margin{
+    margin:0 !important;
+  }
+
+  .my-content-page {
+
     .create-thali-card {
       .create-thali-header {
         padding: 15px;
@@ -62,7 +110,7 @@ page-home {
       text-align: center;
     }
 
-    .card-title {
+    .item-title {
       font-size: 1.0em;
       width: 100%;
       padding-left: 5%;
@@ -70,7 +118,7 @@ page-home {
       text-align: left;
     }
 
-    .card-subtitle {
+    .item-subtitle {
       font-size: 1.0em;
       width: 100%;
       padding-left: 5%;
@@ -129,21 +177,12 @@ page-home {
     }
   }
 
-  ion-scroll[scrollX] {
-    white-space: nowrap;
-
-    .scroll-item {
-      display: inline-block;
-    }
-  }
-
   .select-date-block {
-    height: 70px;
+    height: 60px;
     z-index: 100;
   }
 
   .date-day-block {
-    padding-top: 10px;
     min-width: 70px;
     text-align: center
   }

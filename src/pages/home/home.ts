@@ -10,16 +10,16 @@ import { EditSchedulePage } from '../edit-schedule/edit-schedule';
   selector: 'page-home',
   templateUrl: 'home.html'
 })
-export class HomePage{
-  
+export class HomePage {
+ 
   items: Array<{ title: string, price: number, type: string, note: string, quant: number, size: string, icon: string, title2: string, price2: number, type2: string, note2: string, quant2: number, size2: string, icon2: string, }>;
 
-  constructor(public navCtrl: NavController,        public platform: Platform,
+  constructor(public navCtrl: NavController, public platform: Platform,
     public actionsheetCtrl: ActionSheetController, public alertCtrl: AlertController, public modalCtrl: ModalController, public appService: AppProvider) {
+ 
     this.iniMenuItem();
 
   }
-
 
   iniMenuItem() {
     this.appService.iniMenuItem();

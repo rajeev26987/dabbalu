@@ -13,6 +13,7 @@ import { LoadingController, ToastController } from 'ionic-angular';
 */
 @Injectable()
 export class AppProvider {
+
   icons: string[];
   item: string[];
   price: number[];
@@ -37,6 +38,7 @@ export class AppProvider {
 
 
   constructor(private http: HttpClient, public loadingCtrl: LoadingController, public toastCtrl: ToastController) {
+   
     this.schedule_init = 0;
     this.getScheduledItems();
     this.menu_init = 0;
@@ -47,14 +49,15 @@ export class AppProvider {
     else {
       this.cart_items = [];
     }
-    
-
-
+   
     this.tax_per = 0.12;
     this.deliver_ch = 0;
- //   this.default_sub_item = {item: 'e', price: 0, size: 'e', quant: 0};
+    this.weekDay = ["SUN", "MON", "TUES", "WED", "THU", "FRI", "SAT"];
+    this.monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "June",
+      "July", "Aug", "Sep", "Oct", "Nov", "Dec"
+    ];
 
-    let start = new Date();
+  /*  let start = new Date();
     let start_num = this.formatDate(start);
     let end = new Date(start.getFullYear(), start.getMonth() + 1, 0);
     let end_num = this.formatDate(end);
@@ -112,9 +115,11 @@ export class AppProvider {
         sel: sel
       })
 
-    }
-
+    }*/
+  
   }
+
+
 
   menuInitialized() {
     return this.menu_init;
@@ -128,9 +133,12 @@ export class AppProvider {
       });
       this.loader.present();
       this.menu_init = 3;
-      this.http.get("http://dabbalu.com/food_menu.php").subscribe(r => {
+      this.http.get("http://dabbalu.com/ini_menu.php").subscribe(r => {
         this.loader.dismiss();
-        this.menu_items = r;
+         this.cur_sel_date = r['cur_sel_date'];
+        this.menu_items = r['menu_data'];
+        this.myDates = r['menu_dates'];
+       
         this.menu_init = 1;
 
       },
@@ -933,10 +941,11 @@ export class AppProvider {
 
   showDateStr(date?) {
     let d;
+    console.log('curtrrrrr date ' + this.cur_sel_date);
+    
     if (date) { d = date + "";}
     else { d = this.cur_sel_date + ""; }
 
-  
 
     let  r = d.substring(6,8) + " " + this.monthNames[Number(d.substring(4,6))-1];
     return r;

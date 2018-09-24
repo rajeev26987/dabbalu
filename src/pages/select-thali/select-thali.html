@@ -107,7 +107,7 @@
           </div>
           <div [hidden]="item.type !='a'" class="col col-50">
             <button [disabled]="maxItemReached('a')" [hidden]="cartQuantityForThaliItem(item.item) > 0" ion-button outline small (click)="addToThali(item)" class="add-cart-button">Add</button>
-            <button [hidden]="cartQuantityForThaliItem(item.item) <= 0" class="add-remove-cart-button" ion-button outline small><p (click)="removeFromThali(item.item,'')" class="remove-from-cart">-</p> <p class="cart-quant">{{cartQuantityForThaliItem(item.item)}}</p>   <p [class.disable-add]="maxItemReached('a')" (click)="addToThali(item)" class="add-to-cart">+</p></button>
+            <button [hidden]="cartQuantityForThaliItem(item.item) <= 0" class="add-remove-cart-button" ion-button outline small><p (click)="removeFromThali(item.item,item.size)" class="remove-from-cart">-</p> <p class="cart-quant">{{cartQuantityForThaliItem(item.item)}}</p>   <p [class.disable-add]="maxItemReached('a')" (click)="addToThali(item)" class="add-to-cart">+</p></button>
           </div>
         </div>
 
